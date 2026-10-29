@@ -46,6 +46,7 @@ sprechen → (Transkription durch Anbieter) → optional KI-Aufräumen / Stil �
 | **Schwebender Button („Wolke“)** | Bubble über anderen Apps (Bedienungshilfe-Dienst), schreibt in das fokussierte Feld. Luxx1993s Hauptweg neben SwiftKey. | `dictate/overlay/` | vorhanden |
 | **Spracheingabe-Methode** | Dictate als Spracheingabe-Methode, zusammen mit einer fremden Tastatur (SwiftKey) nutzbar. | `dictate/recognition/DictateVoiceInputMethodService.kt` | vorhanden |
 | **System-Erkennungsdienst** | Dictate als systemweiter Spracherkenner (Standard-Android-`RecognitionService`). Manche Tastaturen (z. B. Gboard) nutzen ihn nicht. | `dictate/recognition/DictateRecognitionService.kt`, `RecognitionActivity.kt` | vorhanden |
+| **Notizen** | Menü am schwebenden Button „Notiz diktieren“ (oder Schalter „Jedes Diktat als Notiz“): Text mit Datum und Uhrzeit in den Ordner „Notizen“ und in die Zwischenablage, ohne Audio, nichts ins Feld. Notizen einzeln oder alle löschen, kopieren, teilen. | `dictate/data/notes/`, `NoteSink.kt`, `DictateNotesScreen.kt` | vorhanden |
 | **Datei transkribieren** | Audiodatei wählen oder aus anderer App teilen, Ergebnis in eigener Ansicht. Auch im Menü des schwebenden Buttons. | `dictate/importer/`, `FileTranscriptionActivity.kt` | vorhanden |
 | ~~Volle Tastatur (IME)~~ | FlorisBoard-Tastatur mit Diktat-Leiste, Prompts, GIFs, Sticker, Scan, Übersetzung | – | **entfernt** (Abschnitt 13) |
 | ~~Wear OS~~ | Diktat von der Uhr | – | **entfernt** (Abschnitt 13) |

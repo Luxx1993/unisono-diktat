@@ -267,6 +267,12 @@ internal fun SettingsTab() {
         )
         UDivider()
         UNavRow(
+            title = stringRes(R.string.dictate__notes_title),
+            icon = UnisonoIcons.Note,
+            onClick = { navController.navigate(Routes.Settings.DictateNotes) },
+        )
+        UDivider()
+        UNavRow(
             title = stringRes(R.string.main__settings_history),
             icon = UnisonoIcons.Clock,
             onClick = { navController.navigate(Routes.Settings.DictateHistory) },

@@ -800,6 +800,9 @@ class DictateBubbleController(private val service: DictateAccessibilityService) 
 
     /** Runs one of the menu's actions (#408). The menu is already closed by the time this is called. */
     private fun runMenuAction(action: BubbleMenuAction) = when (action) {
+        BubbleMenuAction.NOTE -> startingDictation {
+            DictateController.onMicClick(context, DictateController.OutputTarget.OVERLAY, note = true)
+        }
         BubbleMenuAction.TRANSCRIBE_FILE -> launchFromBubble(TranscribeShareActivity.pickIntent(context))
         BubbleMenuAction.HISTORY -> openSettingsScreen("settings/dictate/history")
         BubbleMenuAction.SETTINGS -> openSettingsScreen("settings/dictate")
@@ -1073,7 +1076,7 @@ class DictateBubbleController(private val service: DictateAccessibilityService) 
                 holdStartedAt = SystemClock.uptimeMillis()
                 if (prefs.dictate.floatingButtonHaptic.get()) vibrateTap()
                 startingDictation {
-                    DictateController.onPushToTalkDown(context, DictateController.OutputTarget.OVERLAY)
+                    DictateController.onPushToTalkDown(context, DictateController.OutputTarget.OVERLAY, note = prefs.dictate.notesAlways.get())
                 }
             }
         }
@@ -1641,7 +1644,7 @@ class DictateBubbleController(private val service: DictateAccessibilityService) 
             DictateController.sendRetainedAudio(context, DictateController.OutputTarget.OVERLAY)
             return
         }
-        startingDictation { DictateController.onMicClick(context, DictateController.OutputTarget.OVERLAY) }
+        startingDictation { DictateController.onMicClick(context, DictateController.OutputTarget.OVERLAY, note = prefs.dictate.notesAlways.get()) }
     }
 
     /**

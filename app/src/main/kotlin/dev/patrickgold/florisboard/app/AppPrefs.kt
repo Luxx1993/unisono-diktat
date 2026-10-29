@@ -367,6 +367,16 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "dictate__floating_button_menu_history",
             default = false,
         )
+        // The "dictate a note" entry of that menu: on from the start, it is the way to the notes folder.
+        val floatingButtonMenuNote = boolean(
+            key = "dictate__floating_button_menu_note",
+            default = true,
+        )
+        // Every dictation of the floating button becomes a note instead of text in the field.
+        val notesAlways = boolean(
+            key = "dictate__notes_always",
+            default = false,
+        )
         val floatingButtonMenuSettings = boolean(
             key = "dictate__floating_button_menu_settings",
             default = false,
