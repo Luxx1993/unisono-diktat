@@ -368,6 +368,19 @@
     <string name="dictate__model_picker_search">Modell-ID suchen oder eingeben</string>
     <string name="dictate__model_picker_loading">Modelle werden geladen…</string>
     <string name="dictate__model_picker_chat_price_hint" comment="Explains the price next to each text model">Preis: Eingabe / Ausgabe in € je 1 Mio. Token</string>
+    <string name="dictate__notes_title">Notizen</string>
+    <string name="dictate__notes_menu_dictate">Notiz diktieren</string>
+    <string name="dictate__notes_saved">Notiz gespeichert und kopiert</string>
+    <string name="dictate__notes_empty">Noch keine Notizen. Halte den schwebenden Button gedrückt, wähle „Notiz diktieren“ und sprich.</string>
+    <string name="dictate__notes_always_title">Jedes Diktat als Notiz</string>
+    <string name="dictate__notes_always_summary">Diktate am schwebenden Button werden als Notiz gespeichert und kopiert, nicht ins Feld getippt.</string>
+    <string name="dictate__notes_delete">Notiz löschen</string>
+    <string name="dictate__notes_delete_all">Alle Notizen löschen</string>
+    <string name="dictate__notes_delete_all_title">Alle Notizen löschen?</string>
+    <string name="dictate__notes_delete_all_message">Alle Notizen werden dauerhaft gelöscht. Bereits kopierte Texte bleiben in der Zwischenablage.</string>
+    <string name="dictate__notes_count">{count} Notizen</string>
+    <string name="dictate__notes_copy">Kopieren</string>
+    <string name="dictate__notes_copied">Kopiert</string>
     <string name="dictate__model_picker_count">{count} Modelle</string>
     <string name="dictate__model_picker_refresh">Aktualisieren</string>
     <string name="dictate__model_picker_use_custom">„{model}\" verwenden</string>

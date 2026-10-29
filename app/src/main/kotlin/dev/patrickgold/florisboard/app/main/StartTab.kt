@@ -65,6 +65,7 @@ import dev.patrickgold.florisboard.app.apptheme.Unisono
 import dev.patrickgold.florisboard.app.apptheme.providerDot
 import dev.patrickgold.florisboard.dictate.data.history.DictateHistoryEntry
 import dev.patrickgold.florisboard.dictate.data.history.DictateHistoryStore
+import dev.patrickgold.florisboard.dictate.data.notes.DictateNotesStore
 import dev.patrickgold.florisboard.dictate.data.stats.DictateStats
 import dev.patrickgold.florisboard.dictate.provider.ProviderListing
 import dev.patrickgold.jetpref.datastore.model.collectAsState
@@ -169,6 +170,16 @@ internal fun StartTab() {
             },
             dot = if (rewordingEnabled) c.providerDot(rewordingId) else c.textTertiary,
             onClick = { navController.navigate(Routes.Settings.DictateProviders) },
+        )
+    }
+
+    val noteCount by remember { DictateNotesStore.flow(context) }.collectAsState()
+    UCard {
+        UNavRow(
+            title = stringRes(R.string.dictate__notes_title),
+            subtitle = if (noteCount.isEmpty()) null else stringRes(R.string.dictate__notes_count, "count" to noteCount.size),
+            icon = UnisonoIcons.Note,
+            onClick = { navController.navigate(Routes.Settings.DictateNotes) },
         )
     }
 

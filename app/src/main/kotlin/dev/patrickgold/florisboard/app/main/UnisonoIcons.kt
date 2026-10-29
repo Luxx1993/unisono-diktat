@@ -39,6 +39,7 @@ object UnisonoIcons {
     val AudioFile: ImageVector by lazy { icon("AudioFile", "M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z", "M14 3v5h5M10 17v-5l4-1v5", "M8 17a1 1 0 1 0 2 0a1 1 0 1 0 -2 0z", "M12 16a1 1 0 1 0 2 0a1 1 0 1 0 -2 0z") }
     val Keyboard: ImageVector by lazy { icon("Keyboard", "M5.5 6h13 a2.5 2.5 0 0 1 2.5 2.5v7 a2.5 2.5 0 0 1 -2.5 2.5h-13 a2.5 2.5 0 0 1 -2.5 -2.5v-7 a2.5 2.5 0 0 1 2.5 -2.5z", "M7 10h0M11 10h0M15 10h0M8 14h8") }
     val Archive: ImageVector by lazy { icon("Archive", "M4 7h16v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z", "M3 4h18v3H3zM10 11h4") }
+    val Note: ImageVector by lazy { icon("Note", "M5 4h14v11l-5 5H5z", "M14 20v-5h5", "M8 9h8M8 13h4") }
     val Clock: ImageVector by lazy { icon("Clock", "M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0z", "M12 7v5l3 2") }
 
     private fun icon(name: String, vararg paths: String, stroke: Float = 1.6f): ImageVector =

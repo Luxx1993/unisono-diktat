@@ -31,6 +31,9 @@
   AssemblyAI, Soniox, OpenAI, Gemini, xAI oder einem Offline-Modell auf dem Gerät.
 - **Preise sichtbar**: Die Modellauswahl zeigt neben jedem Modell den Listenpreis in € pro Stunde Audio, auch bei den
   Echtzeit-Modellen ([`docs/PREISE.md`](docs/PREISE.md)).
+- **Notizen**: Im Menü des schwebenden Buttons (gedrückt halten) steht „Notiz diktieren“. Das Diktat wird als reiner Text
+  mit Datum und Uhrzeit im Ordner „Notizen“ gespeichert und zusätzlich in die Zwischenablage kopiert, ohne Audio und ohne
+  etwas ins Feld zu tippen. Einzeln oder alle löschen; wer will, schaltet „Jedes Diktat als Notiz“ ein.
 - **Verlauf und Statistik**: Letzte Diktate zum Kopieren, Wörter gesamt, diesen Monat, Tage in Folge.
 - **Offline-Erkennung** auf dem Gerät, ganz ohne Netz und Anbieter.
 - **Sichern und Wiederherstellen** aller Einstellungen, auf Wunsch mit API-Keys.
