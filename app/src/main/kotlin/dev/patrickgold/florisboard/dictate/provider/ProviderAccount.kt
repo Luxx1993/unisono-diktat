@@ -365,6 +365,18 @@ internal val RETIRED_MODELS: Map<String, Map<String, String>> = mapOf(
         "voxtral-mini-latest" to "voxtral-mini-transcribe-3-0",
         "voxtral-mini-2602" to "voxtral-mini-transcribe-3-0",
         "voxtral-mini-transcribe-realtime-2602" to "voxtral-mini-transcribe-realtime-3-0",
+        // Deprecated since 2026-10-31 with their -latest aliases.
+        "mistral-medium-3-5" to "mistral-small-2603",
+        "mistral-medium-latest" to "mistral-small-2603",
+        "mistral-large-2512" to "mistral-large-4",
+        "mistral-large-latest" to "mistral-large-4",
+    ),
+    // Switched off on 2027-02-26 (announced 2026-08-26); gpt-transcribe is OpenAI's named successor.
+    "openai" to mapOf(
+        "whisper-1" to "gpt-transcribe",
+        "gpt-4o-transcribe" to "gpt-transcribe",
+        "gpt-4o-mini-transcribe" to "gpt-transcribe",
+        "gpt-4o-transcribe-diarize" to "gpt-transcribe",
     ),
     // Retired on OVHcloud AI Endpoints on 2026-11-04.
     "ovhcloud" to mapOf("Mistral-Small-3.2-24B-Instruct-2506" to "gpt-oss-20b"),

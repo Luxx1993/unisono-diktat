@@ -37,11 +37,7 @@ Quelle: die Preisseiten der Anbieter, abgerufen am 21.10.2026, aktualisiert am 0
 | AssemblyAI | universal-3-5-pro-sync | ca. 0,4012 |
 | Gladia | solaria-3 | 0,16 |
 | Gladia | solaria-1 | 0,27 |
-| OpenAI | gpt-4o-mini-transcribe | 0,1605 |
 | OpenAI | gpt-transcribe | ca. 0,2407 |
-| OpenAI | gpt-4o-transcribe | 0,321 |
-| OpenAI | gpt-4o-transcribe-diarize | 0,321 |
-| Mistral | voxtral-mini-latest (abgekündigt, aus am 30.04.2027) | ca. 0,1872 |
 | Mistral | voxtral-mini-transcribe-3-0 | 0,1872 |
 | Mistral | voxtral-small-transcribe-3-0 | 0,214 |
 | ElevenLabs | scribe_v2 | 0,1962 |
@@ -66,12 +62,11 @@ Quelle: die Preisseiten der Anbieter, abgerufen am 21.10.2026, aktualisiert am 0
 | Deepgram | flux-general-multi | 0,4191 |
 | ElevenLabs | scribe_v2_realtime | 0,3477 |
 | Mistral | voxtral-mini-transcribe-realtime-3-0 | 0,428 |
-| Mistral | voxtral-mini-transcribe-realtime-2602 | ca. 0,428 |
 | Gladia | solaria-1 | 0,68 |
 
 ## Weitere Spracherkennungs-Modelle
 
-Neu: OpenAI `whisper-1` (0,321 €/h Datei), `gpt-live-transcribe` und `gpt-realtime-whisper` (0,9095 €/h Echtzeit), Azure `MAI-Transcribe-1` (0,321 €/h), Gemini `gemini-3.5-transcribe-live` (ca. 0,4815 €/h Echtzeit) und Mistral `voxtral-mini-transcribe-realtime-2602` mit 0,321 €/h (die Version 3-0 kostet 0,428 €/h).
+Neu: OpenAI `gpt-live-transcribe` und `gpt-realtime-whisper` (0,9095 €/h Echtzeit), Azure `MAI-Transcribe-1` (0,321 €/h), Gemini `gemini-3.5-transcribe-live` (ca. 0,4815 €/h Echtzeit). Abgekündigte Modelle (OpenAI whisper-1 und gpt-4o-…-transcribe, Mistral 2602, Mistral Medium 3.5 und Large 2512, Gemini 3.1 Flash-Lite) stehen nicht mehr in der Liste; die App stellt eine gespeicherte Auswahl beim Start auf den Nachfolger um.
 
 ## Text-Modelle (Aufräumen, Umformulieren, Zusammenfassen)
 
@@ -136,7 +131,6 @@ Ohne Preis: Groq llama-Modelle (nur auf Anfrage), SiliconFlow (die Preisseite ne
 | Google Gemini | gemini-2.5-flash-lite | 0,0892 / 0,3567 |
 | Google Gemini | gemini-2.5-pro | 1,1146 / 8,9166 |
 | Google Gemini | gemini-3-flash-preview | 0,4458 / 2,675 |
-| Google Gemini | gemini-3.1-flash-lite | 0,2229 / 1,3375 |
 | Google Gemini | gemini-3.1-pro-preview | 1,7833 / 10,70 |
 | Google Gemini | gemini-3.5-flash-lite | 0,2675 / 2,2292 |
 | Google Gemini | gemini-3.6-flash | 0,6687 / 3,3437 |
@@ -150,9 +144,7 @@ Ohne Preis: Groq llama-Modelle (nur auf Anfrage), SiliconFlow (die Preisseite ne
 | Mistral | ministral-14b-2512 | 0,1783 / 0,1783 |
 | Mistral | ministral-3b-2512 | 0,0892 / 0,0892 |
 | Mistral | ministral-8b-2512 | 0,1337 / 0,1337 |
-| Mistral | mistral-large-2512 (abgekündigt) | ca. 0,4458 / 1,3375 |
 | Mistral | mistral-large-4 (Vorschau) | 0,6242 / 1,8725 |
-| Mistral | mistral-medium-3-5 | 1,3375 / 6,6875 |
 | Mistral | mistral-small-2603 | 0,1337 / 0,535 |
 | OpenAI | chat-latest | 4,4583 / 26,7499 |
 | OpenAI | gpt-3.5-turbo | 0,4458 / 1,3375 |

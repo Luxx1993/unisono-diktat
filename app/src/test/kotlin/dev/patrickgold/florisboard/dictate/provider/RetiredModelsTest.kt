@@ -31,6 +31,7 @@ class RetiredModelsTest {
                 realtimeModel = "voxtral-mini-transcribe-realtime-2602", chatModel = "mistral-small-2603"))
             .put(ProviderAccount(providerId = "soniox", transcriptionModel = "stt-async-v5", realtimeModel = "stt-rt-v5"))
             .put(ProviderAccount(providerId = "gemini", chatModel = "gemini-3.1-flash-lite"))
+            .put(ProviderAccount(providerId = "openai", transcriptionModel = "whisper-1", chatModel = "gpt-6-luna"))
             .put(ProviderAccount(providerId = "ovhcloud", chatModel = "Mistral-Small-3.2-24B-Instruct-2506"))
             .replaceRetiredModels()
         val mistral = keyring.getOrEmpty("mistral")
@@ -41,6 +42,8 @@ class RetiredModelsTest {
         assertEquals("stt-rt-v6", keyring.getOrEmpty("soniox").realtimeModel)
         assertEquals("gemini-3.5-flash-lite", keyring.getOrEmpty("gemini").chatModel)
         assertEquals("gpt-oss-20b", keyring.getOrEmpty("ovhcloud").chatModel)
+        assertEquals("gpt-transcribe", keyring.getOrEmpty("openai").transcriptionModel)
+        assertEquals("gpt-6-luna", keyring.getOrEmpty("openai").chatModel)
     }
 
     @Test
