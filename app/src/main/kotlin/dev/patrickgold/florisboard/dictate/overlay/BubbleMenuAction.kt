@@ -31,12 +31,14 @@ enum class BubbleMenuAction(
     @StringRes val labelRes: Int,
     @DrawableRes val iconRes: Int,
 ) {
+    NOTE(R.string.dictate__notes_menu_dictate, R.drawable.ic_dictate_note),
     TRANSCRIBE_FILE(R.string.dictate__import_menu, R.drawable.ic_dictate_audio_file),
     HISTORY(R.string.dictate__history_title, R.drawable.ic_dictate_history),
     SETTINGS(R.string.dictate__floating_button_menu_settings_title, R.drawable.ic_dictate_tune);
 
     /** Whether this entry is in the menu. */
     fun pref(prefs: FlorisPreferenceModel): PreferenceData<Boolean> = when (this) {
+        NOTE -> prefs.dictate.floatingButtonMenuNote
         TRANSCRIBE_FILE -> prefs.dictate.floatingButtonMenuTranscribeFile
         HISTORY -> prefs.dictate.floatingButtonMenuHistory
         SETTINGS -> prefs.dictate.floatingButtonMenuSettings

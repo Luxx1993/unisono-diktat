@@ -314,24 +314,31 @@ val verifySherpaOnnxLibs by tasks.registering {
 }
 tasks.named("preBuild").configure { dependsOn(verifySherpaOnnxLibs) }
 
-fun getGitCommitCount(): Provider<String> {
+// Debug builds are installed over each other with the same package id, and the system and the launchers
+// cache an app's icon per package and version code. A constant code (the project's) left the old icon
+// showing after the icon had changed, so a debug build's code grows with every commit.
+//
+// It counts the minutes from 2024-01-01 to the commit, not the commits: a shallow clone counts only the
+// commits it fetched, and a smaller code than the installed one makes Android refuse the update (the
+// in-app updater installs over the running app). Minutes keep growing from any clone and stay far below
+// Android's limit (2.1 billion) for thousands of years; they are also above every count-based code so far.
+androidComponents {
+    onVariants(selector().withBuildType("debug")) { variant ->
+        val minutes = getGitCommitTime().map { epoch ->
+            ((epoch.toLongOrNull() ?: 0L) - 1_704_067_200L).coerceAtLeast(0L) / 60L
+        }
+        variant.outputs.forEach { output ->
+            output.versionCode.set(minutes.map { (projectVersionCode.toLong() + it).toInt() })
+        }
+    }
+}
+
+fun getGitCommitTime(): Provider<String> {
     if (!File(".git").exists()) {
         return providers.provider { "0" }
     }
-    return providers.exec { commandLine("git", "rev-list", "--count", "HEAD") }
+    return providers.exec { commandLine("git", "log", "-1", "--format=%ct") }
         .standardOutput.asText.map { it.trim() }
-}
-
-// Debug builds are installed over each other with the same package id, and the system and the launchers
-// cache an app's icon per package and version code. A constant code (the project's) left the old icon
-// showing after the icon had changed, so a debug build's code now grows with every commit.
-androidComponents {
-    onVariants(selector().withBuildType("debug")) { variant ->
-        val commits = getGitCommitCount().map { it.toIntOrNull() ?: 0 }
-        variant.outputs.forEach { output ->
-            output.versionCode.set(commits.map { projectVersionCode.toInt() + it })
-        }
-    }
 }
 
 fun getGitCommitHash(short: Boolean = false): Provider<String> {

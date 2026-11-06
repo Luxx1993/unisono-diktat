@@ -58,6 +58,19 @@
     <string name="about__title" comment="Title of About activity">About</string>
 
     <string name="about__version__title" comment="Preference title">Version</string>
+    <string name="app_update__title" comment="Settings row that updates the app from GitHub">Update app</string>
+    <string name="app_update__idle" comment="Subtitle; placeholder is the installed version">Version {version} · tap to check for a new one</string>
+    <string name="app_update__checking">Checking for a new version …</string>
+    <string name="app_update__up_to_date" comment="Placeholder is the installed version">Up to date ({version})</string>
+    <string name="app_update__available" comment="Placeholders: new version, download size">New version {version} ({size}) · tap to install</string>
+    <string name="app_update__downloading" comment="Placeholder is the percentage">Downloading … {percent} %</string>
+    <string name="app_update__needs_permission">Allow diktat to install apps once, then tap again</string>
+    <string name="app_update__installing">Installing … the app restarts afterwards</string>
+    <string name="app_update__failed" comment="Placeholder is the error">Update failed: {error} · tap to retry</string>
+    <string name="app_update__confirm_title">Install update?</string>
+    <string name="app_update__confirm_text" comment="Placeholders: new version, download size">diktat {version} ({size}) is installed over this version. Your keys, statistics, history, notes and styles stay as they are. The app closes briefly during the update.</string>
+    <string name="app_update__confirm_ok">Install</string>
+    <string name="app_update__confirm_cancel">Not now</string>
     <string name="about__version_copied__title" comment="Title of the toast for copying the version string">Version copied to clipboard</string>
     <string name="about__version_copied__error" comment="Title of the error toast for copying the version string">Something went wrong: {error_message}</string>
     <string name="about__changelog__title" comment="Preference title">Changelog</string>
@@ -448,6 +461,19 @@
     <string name="dictate__model_picker_search" comment="Hint for the model search / free-text field">Search or type a model id</string>
     <string name="dictate__model_picker_loading" comment="Status while fetching the model catalog">Loading models…</string>
     <string name="dictate__model_picker_chat_price_hint" comment="Explains the price next to each text model">Price: input / output in € per 1 million tokens</string>
+    <string name="dictate__notes_title" comment="Title of the notes folder screen">Notes</string>
+    <string name="dictate__notes_menu_dictate" comment="Entry of the floating button's menu: dictate a note">Dictate a note</string>
+    <string name="dictate__notes_saved" comment="Toast after a note was saved">Note saved and copied</string>
+    <string name="dictate__notes_empty" comment="Notes screen without notes">No notes yet. Hold the floating button, choose “Dictate a note”, and speak.</string>
+    <string name="dictate__notes_always_title" comment="Switch on the notes screen">Every dictation as a note</string>
+    <string name="dictate__notes_always_summary" comment="Explains the switch">Dictations of the floating button are saved as notes and copied, not typed into the field.</string>
+    <string name="dictate__notes_delete" comment="Delete one note">Delete note</string>
+    <string name="dictate__notes_delete_all" comment="Delete all notes">Delete all notes</string>
+    <string name="dictate__notes_delete_all_title" comment="Dialog title">Delete all notes?</string>
+    <string name="dictate__notes_delete_all_message" comment="Dialog message">All notes are deleted permanently. Texts already copied stay on the clipboard.</string>
+    <string name="dictate__notes_count" comment="Subtitle with the number of notes. {count} is a number.">{count} notes</string>
+    <string name="dictate__notes_copy" comment="Copy one note">Copy</string>
+    <string name="dictate__notes_copied" comment="Toast after copying a note">Copied</string>
     <string name="dictate__model_picker_count" comment="Status showing how many models match. {count} is a number.">{count} models</string>
     <string name="dictate__model_picker_refresh" comment="Button that fetches the live model catalog from the provider">Refresh</string>
     <string name="dictate__model_picker_use_custom" comment="Option to use the typed text as a model id. {model} is the typed text.">Use “{model}”</string>

@@ -77,7 +77,7 @@ class MistralRealtimeTest : FunSpec({
             val session = MistralRealtimeSession(
                 client = OkHttpClient(),
                 apiKey = "mistral-test",
-                model = "voxtral-mini-transcribe-realtime-2602",
+                model = "voxtral-mini-transcribe-realtime-3-0",
                 language = "de",
                 callbacks = out,
                 endpoint = "ws://${server.hostName}:${server.port}/v1/audio/transcriptions/realtime",
@@ -102,7 +102,7 @@ class MistralRealtimeTest : FunSpec({
 
             val handshake = server.takeRequest()
             handshake.getHeader("Authorization") shouldBe "Bearer mistral-test"
-            handshake.path.orEmpty() shouldContain "/v1/audio/transcriptions/realtime?model=voxtral-mini-transcribe-realtime-2602"
+            handshake.path.orEmpty() shouldContain "/v1/audio/transcriptions/realtime?model=voxtral-mini-transcribe-realtime-3-0"
             serverClosed.await(5, TimeUnit.SECONDS) shouldBe true
         } finally {
             server.shutdown()

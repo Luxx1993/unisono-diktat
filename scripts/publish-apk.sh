@@ -78,16 +78,34 @@ if [ -n "$old_key" ] && [ "$old_key" != "$new_key" ] && [ "${ALLOW_NEW_KEY:-0}" 
 fi
 
 cp "$apk" "$tmp/Dictate-Diktat-arm64.apk"
+# version.json: what the in-app updater (AppUpdater) reads to decide whether there is something newer and to
+# check the download. The version code comes from the APK itself, so it is exactly what Android compares.
+badging=$("$tools/aapt2" dump badging "$apk" 2>/dev/null | sed -n 1p)  # sed reads to the end: head would trip pipefail (SIGPIPE)
+version_code=$(printf '%s' "$badging" | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")
+version_name=$(printf '%s' "$badging" | sed -n "s/.*versionName='\([^']*\)'.*/\1/p")
+[ -n "$version_code" ] || { echo "Versionsnummer der APK nicht lesbar." >&2; exit 1; }
+bytes=$(stat -c %s "$apk")
+cat > "$tmp/version.json" <<JSON
+{
+  "versionCode": $version_code,
+  "versionName": "$version_name",
+  "commit": "$(git rev-parse HEAD)",
+  "sha256": "$sha",
+  "size": $bytes,
+  "apk": "Dictate-Diktat-arm64.apk",
+  "builtAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+JSON
 sed -i -E "s/gebaut aus dem Zweig \`[^\`]+\` \(Commit [0-9a-f]+[^)]*\)/gebaut aus dem Zweig \`$branch\` (Commit $commit)/" "$tmp/README.md"
 sed -i -E "s/^- SHA-256 der Datei: .*/- SHA-256 der Datei: \`$sha\`/" "$tmp/README.md"
 sed -i -E "s/^- Signaturschlüssel: (.*)SHA-256 \`[0-9a-f]+\`/- Signaturschlüssel: \1SHA-256 \`$new_key\`/" "$tmp/README.md"
 
 git -C "$tmp" checkout -q --orphan apk-neu
-git -C "$tmp" add Dictate-Diktat-arm64.apk README.md
+git -C "$tmp" add Dictate-Diktat-arm64.apk README.md version.json
 git -C "$tmp" -c user.name="${GIT_AUTHOR_NAME:-$(git config user.name)}" -c user.email="${GIT_AUTHOR_EMAIL:-$(git config user.email)}" \
   commit -q -m "diktat als arm64-Debug-APK (Commit $commit)"
 git -C "$tmp" push -q --force origin apk-neu:refs/heads/apk
 # Der Hilfszweig ist nur lokal; wer ihn stehen lässt, lässt den nächsten Lauf scheitern ("a branch named apk-neu already exists").
 git worktree remove --force "$tmp" 2>/dev/null || true
 git branch -D apk-neu -q 2>/dev/null || true
-echo "Fertig: https://github.com/Luxx1993/unisono-diktat/raw/apk/Dictate-Diktat-arm64.apk ($size, Schlüssel $new_key, SHA-256 $sha)"
+echo "Fertig: https://github.com/Luxx1993/unisono-diktat/raw/apk/Dictate-Diktat-arm64.apk ($size, Version $version_name / $version_code, Schlüssel $new_key, SHA-256 $sha)"

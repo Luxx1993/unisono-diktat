@@ -55,6 +55,7 @@ import dev.patrickgold.florisboard.dictate.data.prompts.snippetBody
 import dev.patrickgold.florisboard.dictate.data.history.DictateHistoryEntry
 import dev.patrickgold.florisboard.dictate.data.history.DictateHistorySource
 import dev.patrickgold.florisboard.dictate.data.history.DictateHistoryStore
+import dev.patrickgold.florisboard.dictate.data.notes.DictateNotesStore
 import dev.patrickgold.florisboard.dictate.data.stats.DictateStats
 import dev.patrickgold.florisboard.dictate.field.TranscriptHandover
 import dev.patrickgold.florisboard.dictate.provider.ChatRequest
@@ -472,6 +473,13 @@ object DictateController {
      */
     private var outputTarget = OutputTarget.OVERLAY
 
+    /**
+     * The dictation in progress is a note: its text goes to the notes folder and the clipboard, not into a field.
+     * Set by the entry points that start a dictation, cleared when the note is saved, discarded or another kind of
+     * dictation starts. Only meaningful for [OutputTarget.OVERLAY].
+     */
+    @Volatile private var noteMode = false
+
     // Haptic feedback (#166) fires on dictation state transitions. Started lazily on the first dictation
     // (so we have an application context for the vibrator), then it observes for the whole process life.
     private var hapticObserverStarted = false
@@ -740,7 +748,7 @@ object DictateController {
      * suits it better because text appears while the finger is still down. Long-form segmented is
      * excluded by the caller: holding a finger down for a ten-minute dictation defeats the point.
      */
-    fun onPushToTalkDown(context: Context, target: OutputTarget = OutputTarget.OVERLAY) {
+    fun onPushToTalkDown(context: Context, target: OutputTarget = OutputTarget.OVERLAY, note: Boolean = false) {
         // Idempotent: the gesture layer can be torn down and restarted mid-press (a recomposition with a
         // new pointerInput key), and re-entering here would otherwise restart the clock — making a long
         // hold look like a tap — and start a second recording. The window is widest with real-time on,
@@ -755,6 +763,7 @@ object DictateController {
         _lockSlideProgress.value = 0f
         setPushToTalk(phase = PushToTalkPhase.HOLDING)
         outputTarget = target
+        noteMode = note && target == OutputTarget.OVERLAY
         startRecording(context)
     }
 
@@ -868,7 +877,7 @@ object DictateController {
      */
     @Volatile private var discardingBar = false
 
-    fun onMicClick(context: Context, target: OutputTarget = OutputTarget.OVERLAY) {
+    fun onMicClick(context: Context, target: OutputTarget = OutputTarget.OVERLAY, note: Boolean = false) {
         // The bar is a leftover from a discard that is still animating — acting on it would stop a
         // recording that no longer exists.
         if (discardingBar) return
@@ -881,6 +890,7 @@ object DictateController {
             is UiState.Rewording -> cancelRewording()
             else -> {
                 outputTarget = target
+                noteMode = note && target == OutputTarget.OVERLAY
                 startRecording(context)
             }
         }
@@ -1136,6 +1146,7 @@ object DictateController {
             _state.value is UiState.Rewording
         ) return
         outputTarget = OutputTarget.RECOGNITION_SERVICE
+        noteMode = false
         recognitionFieldSensitive = sensitiveField
         startRecording(context)
     }
@@ -1179,6 +1190,7 @@ object DictateController {
 
     /** Aborts an in-progress recording and returns to idle (cancel button / leaving the keyboard). */
     fun cancelRecording(keepBarForMs: Long = 0L) {
+        noteMode = false
         pttStopPending = false
         // A discard in flight keeps its flag; any other teardown clears everything.
         setPushToTalk(
@@ -2247,6 +2259,22 @@ object DictateController {
         } else {
             TranscriptJoin.join(rawText.dropLast(text.length).trimEnd(), outputText, appContext.transcriptTighteningSymbols())
         }
+        // A note (the menu's "dictate a note"): the finished text is kept as text in the notes folder and put on the
+        // clipboard, and nothing is written into any field. The folder is the backup for the clipboard, which Android
+        // clears now and then. No history entry: the notes folder is where it lives.
+        if (noteMode && outputTarget == OutputTarget.OVERLAY) {
+            noteMode = false
+            realtimeShown.setLength(0)
+            realtimeTranscript.setLength(0)
+            if (dictated.isNotBlank()) {
+                copyToSystemClipboard(appContext, dictated)
+                DictateNotesStore.add(appContext, dictated)
+                Toast.makeText(appContext, R.string.dictate__notes_saved, Toast.LENGTH_SHORT).show()
+            }
+            discardRetainedAudio()
+            _state.value = UiState.Idle
+            return
+        }
         // The space in front of it, if the field needs one (#443). Kept out of [outputText] on purpose:
         // the history, the re-insert cache and the clipboard copies hold the dictation, not the seam.
         val lead: String
@@ -3186,7 +3214,7 @@ object DictateController {
      * This single seam keeps the rest of the engine editor-agnostic.
      */
     private fun sink(context: Context): DictationSink = when (outputTarget) {
-        OutputTarget.OVERLAY -> AccessibilitySink()
+        OutputTarget.OVERLAY -> if (noteMode) NoteSink else AccessibilitySink()
         // System voice input (#67): the finished text is handed back to the OS via the RecognitionService
         // callback (the calling app/keyboard inserts it), not written into a field ourselves.
         OutputTarget.RECOGNITION_SERVICE -> RecognitionSink()
@@ -3872,6 +3900,7 @@ object DictateController {
                 // Latch where the reworded result goes — the keyboard editor, or the accessibility-injected
                 // field for the floating button's freeform voice command (issue #230). Same as onMicClick.
                 outputTarget = target
+                noteMode = false
                 livePromptArmed = true
                 startRecording(context)
             }

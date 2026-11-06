@@ -290,6 +290,31 @@ data class ProviderAccounts(
         return remove(LEGACY_ASSEMBLY_SYNC_ID).put(merged)
     }
 
+    /**
+     * Moves every stored model the provider has switched off, or is about to, onto its successor
+     * (list in [RETIRED_MODELS], checked 2026-11-06). Only exact stored ids change; a model the user
+     * picked that is still served stays as it is. Returns this same instance when nothing changes.
+     */
+    fun replaceRetiredModels(): ProviderAccounts {
+        var changed = false
+        val updated = accounts.mapValues { (id, account) ->
+            val renames = RETIRED_MODELS[id] ?: return@mapValues account
+            fun swap(model: String): String {
+                val base = model.removeSuffix(ProviderRegistry.ASSEMBLYAI_SYNC_SUFFIX)
+                val next = renames[base] ?: return model
+                return if (base != model) next + ProviderRegistry.ASSEMBLYAI_SYNC_SUFFIX else next
+            }
+            val next = account.copy(
+                transcriptionModel = swap(account.transcriptionModel),
+                chatModel = swap(account.chatModel),
+                realtimeModel = swap(account.realtimeModel),
+            )
+            if (next != account) changed = true
+            next
+        }
+        return if (changed) copy(accounts = updated) else this
+    }
+
     object Serializer : PreferenceSerializer<ProviderAccounts> {
         private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 
@@ -323,3 +348,40 @@ data class ProviderAccounts(
 
 /** Id of the removed separate AssemblyAI Sync entry (merged into AssemblyAI in October 2026). */
 const val LEGACY_ASSEMBLY_SYNC_ID = "assemblyai_sync"
+
+/**
+ * Model ids a provider has retired or announced to retire, per provider, with the successor the app
+ * moves a stored choice to. Source: each provider's deprecation page, read 2026-11-06.
+ */
+internal val RETIRED_MODELS: Map<String, Map<String, String>> = mapOf(
+    // universal-3-pro answers no request since 2026-09-02.
+    "assemblyai" to mapOf("universal-3-pro" to "universal-3-5-pro"),
+    // v5 is removed on 2026-12-15; v6 (2026-11-03) takes the same requests.
+    "soniox" to mapOf("stt-async-v5" to "stt-async-v6", "stt-rt-v5" to "stt-rt-v6"),
+    // Deprecated in favour of 3.5 Flash-Lite.
+    "gemini" to mapOf("gemini-3.1-flash-lite" to "gemini-3.5-flash-lite"),
+    // The 2602 Voxtral models are deprecated since 2026-10-31 and switched off on 2027-04-30.
+    "mistral" to mapOf(
+        "voxtral-mini-latest" to "voxtral-mini-transcribe-3-0",
+        "voxtral-mini-2602" to "voxtral-mini-transcribe-3-0",
+        "voxtral-mini-transcribe-realtime-2602" to "voxtral-mini-transcribe-realtime-3-0",
+        // Deprecated since 2026-10-31 with their -latest aliases.
+        "mistral-medium-3-5" to "mistral-small-2603",
+        "mistral-medium-latest" to "mistral-small-2603",
+        "mistral-large-2512" to "mistral-large-4",
+        "mistral-large-latest" to "mistral-large-4",
+    ),
+    // Switched off on 2027-02-26 (announced 2026-08-26); gpt-transcribe is OpenAI's named successor.
+    "openai" to mapOf(
+        "whisper-1" to "gpt-transcribe",
+        "gpt-4o-transcribe" to "gpt-transcribe",
+        "gpt-4o-mini-transcribe" to "gpt-transcribe",
+        "gpt-4o-transcribe-diarize" to "gpt-transcribe",
+    ),
+    // Retired on OVHcloud AI Endpoints on 2026-11-04.
+    "ovhcloud" to mapOf("Mistral-Small-3.2-24B-Instruct-2506" to "gpt-oss-20b"),
+    "siliconflow" to mapOf(
+        "deepseek-ai/DeepSeek-V3.1" to "deepseek-ai/DeepSeek-V3.1-Terminus",
+        "TeleAI/TeleSpeechASR" to "TeleAI/TeleASR-V3.2",
+    ),
+)

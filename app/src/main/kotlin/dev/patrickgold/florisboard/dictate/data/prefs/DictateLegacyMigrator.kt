@@ -284,6 +284,17 @@ object DictateLegacyMigrator {
     }
 
     /**
+     * Moves stored models that their provider switched off onto the successor (November 2026), see
+     * [ProviderAccounts.replaceRetiredModels]. Runs on every start and writes only when something changed.
+     */
+    suspend fun replaceRetiredModelsIfNeeded() {
+        val prefs by FlorisPreferenceStore
+        val keyring = prefs.dictate.providerAccounts.get()
+        val updated = keyring.replaceRetiredModels()
+        if (updated !== keyring) prefs.dictate.providerAccounts.set(updated)
+    }
+
+    /**
      * Adds the five styles of Entwurf 3 (Aufräumen, Wörtlich, E-Mail, Chat, Aktenvermerk) once to an install
      * whose prompt database predates them; a fresh one is seeded with them when the database is created.
      * The user's own prompts stay as they are, see [PromptsDatabaseHelper.addMissingStyles]. Idempotent via
