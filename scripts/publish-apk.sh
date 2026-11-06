@@ -80,7 +80,7 @@ fi
 cp "$apk" "$tmp/Dictate-Diktat-arm64.apk"
 # version.json: what the in-app updater (AppUpdater) reads to decide whether there is something newer and to
 # check the download. The version code comes from the APK itself, so it is exactly what Android compares.
-badging=$("$tools/aapt2" dump badging "$apk" 2>/dev/null | head -n1)
+badging=$("$tools/aapt2" dump badging "$apk" 2>/dev/null | sed -n 1p)  # sed reads to the end: head would trip pipefail (SIGPIPE)
 version_code=$(printf '%s' "$badging" | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")
 version_name=$(printf '%s' "$badging" | sed -n "s/.*versionName='\([^']*\)'.*/\1/p")
 [ -n "$version_code" ] || { echo "Versionsnummer der APK nicht lesbar." >&2; exit 1; }
