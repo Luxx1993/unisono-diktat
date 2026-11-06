@@ -97,6 +97,12 @@ Was kosten 20, 50 oder 100 Stunden Transkription im Monat, wenn du direkt über 
    danach „Installieren“. Eine ältere diktat-Version wird dabei aktualisiert, Einstellungen bleiben erhalten.
 3. App öffnen und weiter bei „Einrichten“.
 
+**Aktualisieren:** Einstellungen › „App aktualisieren“ (auch unter „Über“). Die App sucht beim Öffnen der Einstellungen
+nach einer neuen Version, lädt sie auf Antippen, prüft die Prüfsumme und installiert sie über die alte. Schlüssel,
+Statistiken, Verlauf, Notizen und Stile bleiben erhalten. Beim ersten Mal fragt Android einmal, ob diktat Apps
+installieren darf, und zeigt seinen Bestätigungsdialog; ab Android 12 laufen spätere Updates meist ohne Dialog.
+Die Play-Version hat diese Funktion nicht, sie wird über Google Play aktualisiert.
+
 Für Google Play gibt es eine eigene Signatur und ein App-Bundle (`scripts/build-play-bundle.sh`); die Schritte stehen in
 [`docs/play-store/ANLEITUNG.md`](docs/play-store/ANLEITUNG.md). Die Debug-APK und die Play-Version lassen sich nicht
 übereinander installieren.

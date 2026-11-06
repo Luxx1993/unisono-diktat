@@ -46,6 +46,19 @@
     <string name="about__data_attributions__title">Daten- und Modell-Lizenzen</string>
     <string name="about__data_attributions__summary">Lizenzen der lokalen Modelle, Wörterbücher und Sprachdaten</string>
     <string name="about__version__title" comment="Preference title">Version</string>
+    <string name="app_update__title">App aktualisieren</string>
+    <string name="app_update__idle">Version {version} · tippen, um nach einer neuen zu suchen</string>
+    <string name="app_update__checking">Suche nach einer neuen Version …</string>
+    <string name="app_update__up_to_date">Aktuell ({version})</string>
+    <string name="app_update__available">Neue Version {version} ({size}) · tippen zum Installieren</string>
+    <string name="app_update__downloading">Lade herunter … {percent} %</string>
+    <string name="app_update__needs_permission">diktat einmalig erlauben, Apps zu installieren, dann noch einmal tippen</string>
+    <string name="app_update__installing">Wird installiert … die App startet danach neu</string>
+    <string name="app_update__failed">Update fehlgeschlagen: {error} · tippen zum Wiederholen</string>
+    <string name="app_update__confirm_title">Update installieren?</string>
+    <string name="app_update__confirm_text">diktat {version} ({size}) wird über diese Version installiert. Deine Schlüssel, Statistiken, der Verlauf, Notizen und Stile bleiben erhalten. Die App schließt sich während des Updates kurz.</string>
+    <string name="app_update__confirm_ok">Installieren</string>
+    <string name="app_update__confirm_cancel">Nicht jetzt</string>
     <string name="about__version_copied__title" comment="Title of the toast for copying the version string">Version in die Zwischenablage kopiert</string>
     <string name="about__version_copied__error" comment="Title of the error toast for copying the version string">Etwas ist schief gelaufen: {error_message}</string>
     <string name="about__changelog__title" comment="Preference title">Änderungsprotokoll</string>

@@ -10,6 +10,8 @@
 
 package dev.patrickgold.florisboard.app.main
 
+import dev.patrickgold.florisboard.app.update.AppUpdateRow
+import dev.patrickgold.florisboard.app.update.AppUpdater
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
@@ -308,6 +310,10 @@ internal fun SettingsTab() {
             icon = UnisonoIcons.Archive,
             onClick = { showBackup = true },
         )
+        if (AppUpdater.isSupported) {
+            UDivider()
+            AppUpdateRow()
+        }
         UDivider()
         UNavRow(
             title = stringRes(R.string.about__title),
