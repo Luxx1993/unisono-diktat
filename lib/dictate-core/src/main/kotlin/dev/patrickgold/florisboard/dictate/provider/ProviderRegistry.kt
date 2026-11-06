@@ -178,7 +178,7 @@ object ProviderRegistry {
         defaultTranscriptionModel = "gpt-transcribe",
         // gpt-6-astra, the third of the current line, is left to the live catalog: at a hundred times
         // Luna's price it buys nothing a correction or a rephrasing needs.
-        curatedChatModels = listOf("gpt-6-luna", "gpt-6.1-sol"),
+        curatedChatModels = listOf("gpt-6-luna", "gpt-6.1-terra", "gpt-6.1-sol"),
         // whisper-1, gpt-4o-transcribe and gpt-4o-mini-transcribe leave the API on 2027-02-26 (announced
         // 2026-08-26). Until then they still come up in the live catalog for whoever wants them; they are
         // just no longer offered as a starting point.
@@ -293,14 +293,14 @@ object ProviderRegistry {
         // for gpt-transcribe, per hour for Groq's Whisper and per second for DeepInfra's.
         //   openai/gpt-transcribe          $0.0045/min   OpenAI
         //   microsoft/mai-transcribe-2     $0.10/h       Azure — 60 languages, code-switching
-        //   mistralai/voxtral-mini-transcribe $0.003/min Mistral (also an EU region)
+        //   mistralai/voxtral-mini-transcribe-3-0 $0.0035/min Mistral (Voxtral 3, 2026-11)
         //   deepgram/nova-3                $0.0043/min   Deepgram
         //   openai/whisper-large-v3-turbo  cheapest      DeepInfra, Groq
         //   openai/whisper-large-v3        from $0.00048/min via DeepInfra (also Together, Groq) — kept
         //                                  because it was the default until now, so a choice stays visible.
         curatedTranscriptionModels = listOf(
             "openai/gpt-transcribe", "microsoft/mai-transcribe-2",
-            "mistralai/voxtral-mini-transcribe", "deepgram/nova-3",
+            "mistralai/voxtral-mini-transcribe-3-0", "deepgram/nova-3",
             "openai/whisper-large-v3-turbo", "openai/whisper-large-v3",
         ),
         // Read 2026-09-04 from the speech-to-text guide: wav, mp3, flac, m4a, ogg, webm, aac.
@@ -357,7 +357,8 @@ object ProviderRegistry {
         // live picker merges any newer ones on top.
         // The whole 2.5 generation is retired; the live picker merges any newer ones on top.
         curatedChatModels = listOf(
-            "gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-3.1-flash-lite",
+            // gemini-3.1-flash-lite is deprecated (Google, 2026-11); 3.5-flash-lite is its successor.
+            "gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.5-flash-lite",
         ),
         // The dedicated STT model first, then the multimodal chat models that double as transcription
         // models — they travel a different endpoint, so both belong here.
@@ -411,7 +412,7 @@ object ProviderRegistry {
     val TOGETHER = ProviderPreset(
         id = "together",
         displayName = "Together AI",
-        baseUrl = "https://api.together.xyz/v1/",
+        baseUrl = "https://api.together.ai/v1/",
         capabilities = CHAT_AND_STT,
         supportsDynamicModels = true,
         apiKeyUrl = "https://api.together.ai/settings/api-keys",
@@ -438,17 +439,23 @@ object ProviderRegistry {
         capabilities = CHAT_AND_STT,
         supportsDynamicModels = true,
         apiKeyUrl = "https://console.mistral.ai/api-keys",
-        defaultTranscriptionModel = "voxtral-mini-latest",
-        // Voxtral 3 (mistral.ai/news/voxtral-3, 2026-10): Small is the most accurate, Mini the cheaper one. The ids are the ones
-        // on Mistral's model pages; "-latest" stays the default until the 3.0 ids are tried against a real key.
-        curatedTranscriptionModels = listOf("voxtral-mini-latest", "voxtral-small-transcribe-3-0", "voxtral-mini-transcribe-3-0"),
+        // Voxtral 3 (Mistral docs, 2026-11): Mini is the default, Small the most accurate. voxtral-mini-latest points at
+        // voxtral-mini-2602, deprecated on 2026-10-31 and switched off on 2027-04-30; a stored choice of it moves to
+        // Mini 3 (RETIRED_MODELS in the app).
+        defaultTranscriptionModel = "voxtral-mini-transcribe-3-0",
+        curatedTranscriptionModels = listOf("voxtral-mini-transcribe-3-0", "voxtral-small-transcribe-3-0"),
+        // Text cleanup: Small 4 is fast and cheap; Large 4 is a preview; Ministral 8B the smallest sensible one.
+        // mistral-medium-3-5 and mistral-large-2512 (and their -latest aliases) are deprecated since 2026-10-31.
+        defaultChatModel = "mistral-small-2603",
+        curatedChatModels = listOf("mistral-small-2603", "mistral-large-4", "ministral-8b-2512"),
         // Realtime (#128): the raw WebSocket needs ?model=… (without it the handshake is refused with 403) and
         // speaks the messages of Mistral's Python SDK, see MistralRealtimeSession. -3-0 is the Voxtral 3 model of
-        // mistral.ai/news/voxtral-3; 2602 stays the default until 3-0 has been tried against a real key.
+        // mistral.ai/news/voxtral-3.
         supportsRealtime = true,
         realtimeApi = RealtimeApi.MISTRAL_VOXTRAL,
-        defaultRealtimeModel = "voxtral-mini-transcribe-realtime-2602",
-        curatedRealtimeModels = listOf("voxtral-mini-transcribe-realtime-2602", "voxtral-mini-transcribe-realtime-3-0"),
+        // 2602 is deprecated since 2026-10-31 (off 2027-04-30); Voxtral 3 realtime is the default.
+        defaultRealtimeModel = "voxtral-mini-transcribe-realtime-3-0",
+        curatedRealtimeModels = listOf("voxtral-mini-transcribe-realtime-3-0"),
         // "By default, your data is hosted in the European Union" (Mistral help centre, updated
         // 2026-08-12). The same page names a separate US endpoint, which this base URL is not, and
         // subprocessors outside the EU for some features.
@@ -468,14 +475,14 @@ object ProviderRegistry {
         // Not the console root: /api-keys is a real route rather than a client-side guess — /apikeys
         // answers 404, so the server itself distinguishes them (2026-09-21).
         apiKeyUrl = "https://console.soniox.com/api-keys",
-        defaultTranscriptionModel = "stt-async-v5",
-        // Verified against Soniox's model catalog; the live picker adds any newer async models.
-        curatedTranscriptionModels = listOf("stt-async-v5"),
-        // Realtime (#128): wss stt-rt.soniox.com/transcribe-websocket, model stt-rt-v5.
+        // v6 since 2026-11-03; v5 is removed on 2026-12-15 (then redirected). The live picker adds newer models.
+        defaultTranscriptionModel = "stt-async-v6",
+        curatedTranscriptionModels = listOf("stt-async-v6"),
+        // Realtime (#128): wss stt-rt.soniox.com/transcribe-websocket, model stt-rt-v6.
         supportsRealtime = true,
         realtimeApi = RealtimeApi.SONIOX,
-        defaultRealtimeModel = "stt-rt-v5",
-        curatedRealtimeModels = listOf("stt-rt-v5"),
+        defaultRealtimeModel = "stt-rt-v6",
+        curatedRealtimeModels = listOf("stt-rt-v6"),
         // Data residency (#403). Soniox sets the region per *project*, and each regional project mints its
         // own key that is valid against that region's hosts only — which is why the report reads as "the
         // new key doesn't work" rather than as anything about a region. Hosts from Soniox's data-residency
@@ -568,12 +575,13 @@ object ProviderRegistry {
         // problem as Deepgram, so again their own words: AssemblyAI's support article on getting a key
         // names this URL (support.assemblyai.com, read 2026-09-21).
         apiKeyUrl = "https://www.assemblyai.com/dashboard/api-keys",
-        defaultTranscriptionModel = "universal-3-pro",
+        // universal-3-pro was switched off on 2026-09-02 (AssemblyAI changelog); 3.5 Pro replaces it.
+        defaultTranscriptionModel = "universal-3-5-pro",
         // `-sync` is not a model of AssemblyAI's but this app's name for the Sync API with that model: one request
         // instead of upload-create-poll, which is what a short dictation wants (see [ASSEMBLYAI_SYNC_SUFFIX]).
         // The two ways in share one account and one key, so they are one entry here.
         curatedTranscriptionModels = listOf(
-            "universal-3-pro", "universal-3-5-pro", "universal-2", "universal-3-5-pro$ASSEMBLYAI_SYNC_SUFFIX",
+            "universal-3-5-pro", "universal-2", "universal-3-5-pro$ASSEMBLYAI_SYNC_SUFFIX",
         ),
         // The EU region (Dublin) keeps audio and transcript in the EU. The Sync API sits on the same region
         // under `sync.` instead of `api.` (see [assemblySyncBaseUrl]), so one choice covers both.
@@ -795,10 +803,10 @@ object ProviderRegistry {
         // Japanese and Korean, where TeleSpeech is Mandarin and Chinese dialects only.
         defaultTranscriptionModel = "FunAudioLLM/SenseVoiceSmall",
         curatedChatModels = listOf(
-            "deepseek-ai/DeepSeek-V3.2", "deepseek-ai/DeepSeek-V3.1", "deepseek-ai/DeepSeek-V3",
+            "deepseek-ai/DeepSeek-V3.2", "deepseek-ai/DeepSeek-V4.1-Flash", "deepseek-ai/DeepSeek-V3.1-Terminus",
         ),
         curatedTranscriptionModels = listOf(
-            "FunAudioLLM/SenseVoiceSmall", "TeleAI/TeleSpeechASR",
+            "FunAudioLLM/SenseVoiceSmall", "TeleAI/TeleASR-V3.2", "Qwen/Qwen3-ASR-1.7B",
         ),
     )
 
@@ -911,9 +919,10 @@ object ProviderRegistry {
         // Mistral-Small-3.2 took 0.9 s, Llama-3.3-70B 4.8 s. gpt-oss-120b and Qwen3.8-27B are in the catalog
         // but only ever answered the anonymous probe with 429, so nothing is claimed for them and the live
         // list offers them unvouched. OVHcloud's ids are capitalised, unlike Scaleway's for the same models.
-        defaultChatModel = "Mistral-Small-3.2-24B-Instruct-2506",
+        // Mistral-Small-3.2-24B-Instruct-2506 was retired on 2026-11-04 (OVHcloud catalog).
+        defaultChatModel = "gpt-oss-20b",
         curatedChatModels = listOf(
-            "Mistral-Small-3.2-24B-Instruct-2506", "Meta-Llama-3_3-70B-Instruct", "gpt-oss-120b", "gpt-oss-20b", "Qwen3.8-27B",
+            "gpt-oss-20b", "Qwen3.5-9B", "gpt-oss-120b", "Meta-Llama-3_3-70B-Instruct", "Qwen3.8-27B",
         ),
         // whisper-large-v3 rather than the turbo as the default because the turbo is the one that got words
         // wrong: on the same German sample it wrote "Sprachkennung" in five containers out of five, where

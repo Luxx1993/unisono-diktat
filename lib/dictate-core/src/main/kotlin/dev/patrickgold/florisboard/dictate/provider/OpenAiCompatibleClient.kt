@@ -298,15 +298,21 @@ class OpenAiCompatibleClient(
         temperature: Double? = null,
     ): Request {
         val fileBody = request.audioBody()
+        val mistral = isMistralVoxtral(config.normalizedBaseUrl, request.model)
         val multipart = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             // The name, not the part's content type, is what these endpoints read — see
             // [audioUploadNameOf], which carries the measurement that proves it.
             .addFormDataPart("file", audioUploadNameOf(request.audioFile), fileBody)
             .addFormDataPart("model", request.model)
-            .addFormDataPart("response_format", "json")
             .apply {
+                // Mistral's `audio/transcriptions` documents only model, file, language, diarize,
+                // context_bias, timestamp_granularities, temperature and stream (checked 2026-11-06):
+                // no `response_format` and no `prompt`. JSON is its only answer anyway, and the
+                // language is a bare two-letter code.
+                if (!mistral) addFormDataPart("response_format", "json")
                 val lang = request.language?.takeIf { it.isNotEmpty() && it != "detect" }
+                    ?.let { if (mistral) it.substringBefore('-').lowercase() else it }
                 if (usesLanguagesField(request.model)) {
                     // gpt-transcribe replaced the singular `language` with `languages`, "a list of
                     // expected input languages when the recording may contain more than one language".
@@ -325,7 +331,7 @@ class OpenAiCompatibleClient(
                     // fields must never be sent together.
                     addFormDataPart("language", lang)
                 }
-                if (!request.prompt.isNullOrEmpty()) addFormDataPart("prompt", request.prompt)
+                if (!mistral && !request.prompt.isNullOrEmpty()) addFormDataPart("prompt", request.prompt)
                 if (temperature != null) addFormDataPart("temperature", temperature.toString())
             }
             .build()

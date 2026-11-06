@@ -14,7 +14,7 @@ import java.util.Locale
 
 /**
  * List prices for speech recognition in euros per hour of audio, so the model picker can show what a model
- * costs. Pay-as-you-go prices from each provider's own price page, read on 2026-10-21 and converted at
+ * costs. Pay-as-you-go prices from each provider's own price page, read on 2026-10-21 (updated 2026-11-06) and converted at
  * 1 EUR = 1.1215 USD (Gladia, Scaleway and OVHcloud list in euros). Speaker labels and custom vocabulary
  * add a surcharge at some providers and are not included.
  *
@@ -29,17 +29,19 @@ object ModelPrices {
 
     /** File transcription, keyed `provider id|model id` (lower case). */
     private val batch: Map<String, Price> = mapOf(
-        "openrouter|openai/whisper-large-v3-turbo" to p(0.0096),
-        "openrouter|openai/whisper-large-v3" to p(0.0257),
-        "openrouter|nvidia/parakeet-tdt-0.6b-v3" to p(0.0802),
+        "openrouter|openai/whisper-large-v3-turbo" to p(0.0107),
+        "openrouter|openai/whisper-large-v3" to p(0.0241),
+        "openrouter|nvidia/parakeet-tdt-0.6b-v3" to p(0.0535),
         "openrouter|microsoft/mai-transcribe-2" to p(0.0892),
         "openrouter|openai/gpt-transcribe" to p(0.2407),
         "openrouter|elevenlabs/scribe-v2" to p(0.1958),
-        "openrouter|x-ai/grok-stt-1.0" to p(0.0899),
+        "openrouter|x-ai/grok-stt-1.0" to p(0.0892),
         "openrouter|mistralai/voxtral-mini-transcribe" to p(0.1605),
+        "openrouter|mistralai/voxtral-mini-transcribe-3-0" to p(0.1872),
+        "openrouter|qwen/qwen3-asr-1.7b" to p(0.0241),
         "openrouter|google/gemini-3.5-transcribe" to p(0.2675, approx = true),
         "openrouter|deepgram/nova-3" to p(0.2311, approx = true),
-        "openrouter|assemblyai/universal-3-6-pro" to p(0.2664, approx = true),
+        "openrouter|assemblyai/universal-3-6-pro" to p(0.2675),
         "groq|whisper-large-v3-turbo" to p(0.0357),
         "groq|whisper-large-v3" to p(0.099),
         "ovhcloud|whisper-large-v3-turbo" to p(0.046),
@@ -48,7 +50,7 @@ object ModelPrices {
         "together|openai/whisper-large-v3" to p(0.0802),
         "together|nvidia/parakeet-tdt-0.6b-v3" to p(0.0802),
         "xai|grok-voice-transcribe-2.0" to p(0.0892, approx = true),
-        "soniox|stt-async-v5" to p(0.087, approx = true),
+        "soniox|stt-async-v6" to p(0.087, approx = true),
         "azure|mai-transcribe-2" to p(0.0892),
         "azure|mai-transcribe-1.5" to p(0.321),
         "assemblyai|universal-2" to p(0.1337),
@@ -75,15 +77,15 @@ object ModelPrices {
 
     /** Live transcription, which providers usually bill higher than files. */
     private val realtime: Map<String, Price> = mapOf(
-        "soniox|stt-rt-v5" to p(0.107),
+        "soniox|stt-rt-v6" to p(0.107),
         "assemblyai|universal-streaming-english" to p(0.1337),
         "assemblyai|universal-streaming-multilingual" to p(0.1337),
         "assemblyai|universal-3-6-pro" to p(0.4012),
         "xai|grok-voice-transcribe-2.0" to p(0.1783, approx = true),
         "deepgram|nova-2" to p(0.3121),
-        "deepgram|nova-3" to p(0.2568, approx = true),
-        "deepgram|flux-general-en" to p(0.3477, approx = true),
-        "deepgram|flux-general-multi" to p(0.4173),
+        "deepgram|nova-3" to p(0.4102),
+        "deepgram|flux-general-en" to p(0.4102),
+        "deepgram|flux-general-multi" to p(0.4191),
         "elevenlabs|scribe_v2_realtime" to p(0.3477),
         "mistral|voxtral-mini-transcribe-realtime-3-0" to p(0.428),
         "mistral|voxtral-mini-transcribe-realtime-2602" to p(0.321),
@@ -119,7 +121,8 @@ object ModelPrices {
         "anthropic|claude-sonnet-4-6" to c(2.675, 13.3749, approx = true),
         "anthropic|claude-sonnet-5" to c(1.7833, 8.9166, approx = true),
         "anthropic|claude-sonnet-5-5" to c(1.7833, 8.9166),
-        "cerebras|gpt-oss-120b" to c(0.3121, 0.6687, approx = true),
+        "cerebras|gpt-oss-120b" to c(0.3121, 0.6687),
+        "cerebras|qwen-3.8-27b" to c(0.8827, 1.3286),
         "deepinfra|anthropic/claude-haiku-4-5" to c(0.8917, 4.4583),
         "deepinfra|anthropic/claude-sonnet-5" to c(2.675, 13.3749),
         "deepinfra|deepseek-ai/deepseek-r1-0528" to c(0.4458, 1.9171),
@@ -141,6 +144,8 @@ object ModelPrices {
         "deepinfra|qwen/qwen3-32b" to c(0.0713, 0.2497),
         "deepinfra|qwen/qwen3.5-397b-a17b" to c(0.4012, 2.675),
         "deepinfra|qwen/qwen3.6-27b" to c(0.2853, 2.8533),
+        "deepinfra|qwen/qwen3.5-9b" to c(0.0892, 0.1337),
+        "deepinfra|openai/gpt-oss-120b" to c(0.033, 0.1516),
         "deepseek|deepseek-flash" to c(0.2675, 1.07),
         "deepseek|deepseek-v4-pro" to c(1.177, 3.531),
         "gemini|gemini-2.5-flash" to c(0.2675, 2.2292),
@@ -158,11 +163,12 @@ object ModelPrices {
         "groq|openai/gpt-oss-safeguard-20b" to c(0.0669, 0.2675),
         "groq|qwen/qwen3.8-27b" to c(0.7133, 3.5667),
         "mistral|codestral" to c(0.2675, 0.8025, approx = true),
-        "mistral|ministral-3-14b" to c(0.1783, 0.1783, approx = true),
-        "mistral|ministral-3-3b" to c(0.0892, 0.0892, approx = true),
-        "mistral|ministral-3-8b" to c(0.1337, 0.1337, approx = true),
-        "mistral|mistral-large-3" to c(0.4458, 1.3375, approx = true),
-        "mistral|mistral-large-4-0" to c(1.2127, 3.7272, approx = true),
+        "mistral|ministral-14b-2512" to c(0.1783, 0.1783),
+        "mistral|ministral-3b-2512" to c(0.0892, 0.0892),
+        "mistral|ministral-8b-2512" to c(0.1337, 0.1337),
+        "mistral|mistral-large-2512" to c(0.4458, 1.3375, approx = true),
+        "mistral|mistral-large-4" to c(0.6242, 1.8725),
+        "mistral|mistral-small-latest" to c(0.1337, 0.535),
         "mistral|mistral-medium-3-5" to c(1.3375, 6.6875),
         "mistral|mistral-small-2603" to c(0.1337, 0.535),
         "openai|chat-latest" to c(4.4583, 26.7499),
@@ -193,6 +199,7 @@ object ModelPrices {
         "openai|gpt-6-luna" to c(0.0892, 0.4458),
         "openai|gpt-6-sol" to c(1.7833, 8.9166),
         "openai|gpt-6.1-sol" to c(1.7833, 8.9166),
+        "openai|gpt-6.1-terra" to c(0.8917, 4.4583),
         "openai|o1" to c(13.3749, 53.4998),
         "openai|o1-pro" to c(133.7494, 534.9978),
         "openai|o3" to c(1.7833, 7.1333),
@@ -210,6 +217,7 @@ object ModelPrices {
         "openrouter|minimax/minimax-m3.1-flash:free" to c(0.0, 0.0),
         "openrouter|nvidia/nemotron-3-ultra-550b-a55b:free" to c(0.0, 0.0),
         "openrouter|openai/gpt-6-luna" to c(0.0892, 0.4458),
+        "openrouter|openai/gpt-oss-120b" to c(0.0178, 0.066),
         "openrouter|stepfun/step-5-preview" to c(0.8917, 2.4075),
         "openrouter|tencent/hy3" to c(0.1177, 0.4708),
         "openrouter|tencent/hy4-preview" to c(0.7436, 2.23),
@@ -220,7 +228,6 @@ object ModelPrices {
         "ovhcloud|gpt-oss-20b" to c(0.04, 0.15),
         "ovhcloud|meta-llama-3_3-70b-instruct" to c(0.67, 0.67),
         "ovhcloud|mistral-nemo-instruct-2407" to c(0.13, 0.13),
-        "ovhcloud|mistral-small-3.2-24b-instruct-2506" to c(0.09, 0.28),
         "ovhcloud|qwen2.5-vl-72b-instruct" to c(0.91, 0.91),
         "ovhcloud|qwen3.5-397b-a17b" to c(0.6, 3.6),
         "ovhcloud|qwen3.5-9b" to c(0.1, 0.15),

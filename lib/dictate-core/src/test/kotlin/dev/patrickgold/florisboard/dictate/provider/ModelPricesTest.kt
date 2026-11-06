@@ -27,7 +27,7 @@ class ModelPricesTest : FunSpec({
 
     test("the exact figure shows with 2 to 4 decimals and no trailing zeros") {
         ModelPrices.format(ModelPrices.batchPrice("groq", "whisper-large-v3-turbo"), Locale.GERMANY) shouldBe "0,0357 €/h"
-        ModelPrices.format(ModelPrices.batchPrice("openrouter", "openai/whisper-large-v3-turbo"), Locale.GERMANY) shouldBe "0,0096 €/h"
+        ModelPrices.format(ModelPrices.batchPrice("openrouter", "openai/whisper-large-v3-turbo"), Locale.GERMANY) shouldBe "0,0107 €/h"
         ModelPrices.format(ModelPrices.Price(0.10), Locale.GERMANY) shouldBe "0,10 €/h"
         ModelPrices.format(ModelPrices.Price(0.015), Locale.GERMANY) shouldBe "0,015 €/h"
         ModelPrices.format(ModelPrices.Price(1.5), Locale.GERMANY) shouldBe "1,50 €/h"
@@ -42,8 +42,8 @@ class ModelPricesTest : FunSpec({
 
     test("every curated text model of the paid providers has a price except the known gaps") {
         val gaps = setOf(
-            "groq|qwen/qwen3.8-27b", "cerebras|qwen-3.8-27b", "ollama", "siliconflow|deepseek-ai/deepseek-v3.2",
-            "siliconflow|deepseek-ai/deepseek-v3.1", "siliconflow|deepseek-ai/deepseek-v3",
+            "groq|qwen/qwen3.8-27b", "ollama", "siliconflow|deepseek-ai/deepseek-v3.2",
+            "siliconflow|deepseek-ai/deepseek-v4.1-flash", "siliconflow|deepseek-ai/deepseek-v3.1-terminus",
         )
         val missing = ProviderRegistry.presets.flatMap { preset ->
             preset.curatedChatModels.filter { ModelPrices.chatPrice(preset.id, it) == null }.map { "${preset.id}|${it.lowercase()}" }
@@ -53,7 +53,7 @@ class ModelPricesTest : FunSpec({
 
     test("a router adds its surcharge behind the price") {
         ModelPrices.chatText("openrouter", "anthropic/claude-haiku-5.5", Locale.GERMANY) shouldBe "0,0892 / 0,4458 €/M +5,5 %"
-        ModelPrices.batchText("openrouter", "openai/whisper-large-v3-turbo", Locale.GERMANY) shouldBe "0,0096 €/h +5,5 %"
+        ModelPrices.batchText("openrouter", "openai/whisper-large-v3-turbo", Locale.GERMANY) shouldBe "0,0107 €/h +5,5 %"
         ModelPrices.chatText("groq", "openai/gpt-oss-120b", Locale.GERMANY) shouldBe "0,1337 / 0,535 €/M"
         ModelPrices.chatText("openrouter", "no-such-model") shouldBe null
     }
@@ -65,8 +65,8 @@ class ModelPricesTest : FunSpec({
 
     test("every curated transcription model of the paid providers has a price except the known gaps") {
         val gaps = setOf(
-            "assemblyai|universal-3-pro", "openrouter|google/gemini-3.5-transcribe", "deepgram|nova-2", "siliconflow|funaudiollm/sensevoicesmall",
-            "siliconflow|teleai/telespeechasr", "local|whisper-base", "local|whisper-tiny", "openai|gpt-transcribe-diarize",
+            "openrouter|google/gemini-3.5-transcribe", "deepgram|nova-2", "siliconflow|funaudiollm/sensevoicesmall",
+            "siliconflow|teleai/teleasr-v3.2", "siliconflow|qwen/qwen3-asr-1.7b", "local|whisper-base", "local|whisper-tiny", "openai|gpt-transcribe-diarize",
         )
         val missing = ProviderRegistry.presets.flatMap { preset ->
             preset.curatedTranscriptionModels.filter { ModelPrices.batchPrice(preset.id, it) == null }

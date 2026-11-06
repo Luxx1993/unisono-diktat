@@ -2,23 +2,25 @@
 
 Die App zeigt den Preis neben jedem Modell in der Modellauswahl (Datei) und in der Auswahl der Echtzeit-Modelle, mit 2 bis 4 Nachkommastellen und ohne überflüssige Nullen. Die Daten stehen in `lib/dictate-core/.../provider/ModelPrices.kt`, die Browser-Version in `js/prices.js` von Unisono.
 
-Quelle: die Preisseiten der Anbieter, abgerufen am 21.10.2026, normale Pay-as-you-go-Preise, Dollarpreise umgerechnet mit 1 € = 1,1215 $ (Gladia, Scaleway und OVHcloud listen in Euro). Aufpreise für Sprechertrennung oder Fachbegriffe sind nicht enthalten. „ca.“ steht bei gerechneten, geschätzten oder nur aus Drittquellen belegten Werten (Token-Preise, Aktionspreise, „ab“-Preise). Wo kein Preis gefunden wurde, zeigt die App keinen.
+Quelle: die Preisseiten der Anbieter, abgerufen am 21.10.2026, aktualisiert am 06.11.2026, normale Pay-as-you-go-Preise, Dollarpreise umgerechnet mit 1 € = 1,1215 $ (Gladia, Scaleway und OVHcloud listen in Euro). Aufpreise für Sprechertrennung oder Fachbegriffe sind nicht enthalten. „ca.“ steht bei gerechneten, geschätzten oder nur aus Drittquellen belegten Werten (Token-Preise, Aktionspreise, „ab“-Preise). Wo kein Preis gefunden wurde, zeigt die App keinen.
 
 ## Datei
 
 | Anbieter | Modell | €/h |
 |---|---|---|
-| OpenRouter | openai/whisper-large-v3-turbo | 0,0096 |
+| OpenRouter | openai/whisper-large-v3-turbo | 0,0107 |
 | OpenRouter | openai/whisper-large-v3 | 0,0257 |
-| OpenRouter | nvidia/parakeet-tdt-0.6b-v3 | 0,0802 |
+| OpenRouter | nvidia/parakeet-tdt-0.6b-v3 | 0,0535 |
 | OpenRouter | microsoft/mai-transcribe-2 | 0,0892 |
 | OpenRouter | openai/gpt-transcribe | 0,2407 |
 | OpenRouter | elevenlabs/scribe-v2 | 0,1958 |
-| OpenRouter | x-ai/grok-stt-1.0 | 0,0899 |
+| OpenRouter | x-ai/grok-stt-1.0 | 0,0892 |
 | OpenRouter | mistralai/voxtral-mini-transcribe | 0,1605 |
 | OpenRouter | google/gemini-3.5-transcribe | ca. 0,2675 |
 | OpenRouter | deepgram/nova-3 | ca. 0,2311 |
-| OpenRouter | assemblyai/universal-3-6-pro | ca. 0,2664 |
+| OpenRouter | assemblyai/universal-3-6-pro | 0,2675 |
+| OpenRouter | mistralai/voxtral-mini-transcribe-3-0 | 0,1872 |
+| OpenRouter | qwen/qwen3-asr-1.7b | 0,0241 |
 | Groq | whisper-large-v3-turbo | 0,0357 |
 | Groq | whisper-large-v3 | 0,099 |
 | OVHcloud | whisper-large-v3-turbo | 0,046 |
@@ -27,7 +29,7 @@ Quelle: die Preisseiten der Anbieter, abgerufen am 21.10.2026, normale Pay-as-yo
 | Together AI | openai/whisper-large-v3 | 0,0802 |
 | Together AI | nvidia/parakeet-tdt-0.6b-v3 | 0,0802 |
 | xAI | grok-voice-transcribe-2.0 | ca. 0,0892 |
-| Soniox | stt-async-v5 | ca. 0,087 |
+| Soniox | stt-async-v6 | ca. 0,087 |
 | Azure | mai-transcribe-2 | 0,0892 |
 | Azure | mai-transcribe-1.5 | 0,321 |
 | AssemblyAI | universal-2 | 0,1337 |
@@ -39,7 +41,7 @@ Quelle: die Preisseiten der Anbieter, abgerufen am 21.10.2026, normale Pay-as-yo
 | OpenAI | gpt-transcribe | ca. 0,2407 |
 | OpenAI | gpt-4o-transcribe | 0,321 |
 | OpenAI | gpt-4o-transcribe-diarize | 0,321 |
-| Mistral | voxtral-mini-latest | ca. 0,1872 |
+| Mistral | voxtral-mini-latest (abgekündigt, aus am 30.04.2027) | ca. 0,1872 |
 | Mistral | voxtral-mini-transcribe-3-0 | 0,1872 |
 | Mistral | voxtral-small-transcribe-3-0 | 0,214 |
 | ElevenLabs | scribe_v2 | 0,1962 |
@@ -53,15 +55,15 @@ Quelle: die Preisseiten der Anbieter, abgerufen am 21.10.2026, normale Pay-as-yo
 
 | Anbieter | Modell | €/h |
 |---|---|---|
-| Soniox | stt-rt-v5 | 0,107 |
+| Soniox | stt-rt-v6 | 0,107 |
 | AssemblyAI | universal-streaming-english | 0,1337 |
 | AssemblyAI | universal-streaming-multilingual | 0,1337 |
 | AssemblyAI | universal-3-6-pro | 0,4012 |
 | xAI | grok-voice-transcribe-2.0 | ca. 0,1783 |
 | Deepgram | nova-2 | 0,3121 |
-| Deepgram | nova-3 | ca. 0,2568 |
-| Deepgram | flux-general-en | ca. 0,3477 |
-| Deepgram | flux-general-multi | 0,4173 |
+| Deepgram | nova-3 | 0,4102 |
+| Deepgram | flux-general-en | 0,4102 |
+| Deepgram | flux-general-multi | 0,4191 |
 | ElevenLabs | scribe_v2_realtime | 0,3477 |
 | Mistral | voxtral-mini-transcribe-realtime-3-0 | 0,428 |
 | Mistral | voxtral-mini-transcribe-realtime-2602 | ca. 0,428 |
@@ -81,11 +83,11 @@ Gestaffelt oder befristet:
 - **Gemini** 3.6 und 3.8 Flash: Einführungspreis bis 31.12.2026, ab 1.1.2027 1,50 / 7,50 $. Gemini 4 Argon: bis 30.11.2026 2 / 10 $, danach 4 / 20 $.
 - **DeepSeek:** Spitzenzeit-Preis (Mo bis Fr 01 bis 04 und 06 bis 10 Uhr UTC); außerhalb halb so teuer.
 - **xAI:** ab 200.000 Token Prompt der doppelte Preis.
-- **Cerebras:** Preis für gpt-oss-120b aus einer Drittquelle, die Preisseite nennt keinen.
+- **Cerebras:** gpt-oss-120b und qwen-3.8-27b stehen seit November 2026 auf der Preisseite.
 - **OpenRouter:** Anbieterpreise ohne Aufschlag; dazu kommen 5,5 % Gebühr beim Aufladen. Die Anzeige hängt deshalb „+5,5 %“ hinter jeden OpenRouter-Preis, bei Spracherkennung und bei Text-Modellen. Die Auswahl sind die meistgenutzten Modelle vom 20.10.2026.
-- **OVHcloud:** Mistral-Small-3.2 und Mistral-Nemo werden zum 04.11.2026 abgeschaltet.
+- **OVHcloud:** Mistral-Small-3.2 ist seit dem 04.11.2026 abgeschaltet; die App stellt gespeicherte Auswahl auf gpt-oss-20b um.
 
-Ohne Preis: Cerebras qwen-3.8-27b, Groq llama-Modelle (nur auf Anfrage), SiliconFlow (die Preisseite nennt keine Währung und keine IDs), Together AI (die Preisseite nennt keine IDs; nur gpt-oss-120b ist sicher zugeordnet). Ollama und eigene Server sind kostenlos.
+Ohne Preis: Groq llama-Modelle (nur auf Anfrage), SiliconFlow (die Preisseite nennt keine Währung und keine IDs), Together AI (die Preisseite nennt keine IDs; nur gpt-oss-120b ist sicher zugeordnet). Ollama und eigene Server sind kostenlos.
 
 | Anbieter | Modell | Eingabe / Ausgabe in € je 1 Mio. Token |
 |---|---|---|
@@ -103,7 +105,8 @@ Ohne Preis: Cerebras qwen-3.8-27b, Groq llama-Modelle (nur auf Anfrage), Silicon
 | Anthropic | claude-sonnet-4-6 | ca. 2,675 / 13,3749 |
 | Anthropic | claude-sonnet-5 | ca. 1,7833 / 8,9166 |
 | Anthropic | claude-sonnet-5-5 | 1,7833 / 8,9166 |
-| Cerebras | gpt-oss-120b | ca. 0,3121 / 0,6687 |
+| Cerebras | gpt-oss-120b | 0,3121 / 0,6687 |
+| Cerebras | qwen-3.8-27b | 0,8827 / 1,3286 |
 | DeepInfra | anthropic/claude-haiku-4-5 | 0,8917 / 4,4583 |
 | DeepInfra | anthropic/claude-sonnet-5 | 2,675 / 13,3749 |
 | DeepInfra | deepseek-ai/deepseek-r1-0528 | 0,4458 / 1,9171 |
@@ -125,6 +128,8 @@ Ohne Preis: Cerebras qwen-3.8-27b, Groq llama-Modelle (nur auf Anfrage), Silicon
 | DeepInfra | qwen/qwen3-32b | 0,0713 / 0,2497 |
 | DeepInfra | qwen/qwen3.5-397b-a17b | 0,4012 / 2,675 |
 | DeepInfra | qwen/qwen3.6-27b | 0,2853 / 2,8533 |
+| DeepInfra | qwen/qwen3.5-9b | 0,0892 / 0,1337 |
+| DeepInfra | openai/gpt-oss-120b | 0,033 / 0,1516 |
 | DeepSeek | deepseek-flash | 0,2675 / 1,07 |
 | DeepSeek | deepseek-v4-pro | 1,177 / 3,531 |
 | Google Gemini | gemini-2.5-flash | 0,2675 / 2,2292 |
@@ -142,11 +147,11 @@ Ohne Preis: Cerebras qwen-3.8-27b, Groq llama-Modelle (nur auf Anfrage), Silicon
 | Groq | openai/gpt-oss-safeguard-20b | 0,0669 / 0,2675 |
 | Groq | qwen/qwen3.8-27b | 0,7133 / 3,5667 |
 | Mistral | codestral | ca. 0,2675 / 0,8025 |
-| Mistral | ministral-3-14b | ca. 0,1783 / 0,1783 |
-| Mistral | ministral-3-3b | ca. 0,0892 / 0,0892 |
-| Mistral | ministral-3-8b | ca. 0,1337 / 0,1337 |
-| Mistral | mistral-large-3 | ca. 0,4458 / 1,3375 |
-| Mistral | mistral-large-4-0 | ca. 1,2127 / 3,7272 |
+| Mistral | ministral-14b-2512 | 0,1783 / 0,1783 |
+| Mistral | ministral-3b-2512 | 0,0892 / 0,0892 |
+| Mistral | ministral-8b-2512 | 0,1337 / 0,1337 |
+| Mistral | mistral-large-2512 (abgekündigt) | ca. 0,4458 / 1,3375 |
+| Mistral | mistral-large-4 (Vorschau) | 0,6242 / 1,8725 |
 | Mistral | mistral-medium-3-5 | 1,3375 / 6,6875 |
 | Mistral | mistral-small-2603 | 0,1337 / 0,535 |
 | OpenAI | chat-latest | 4,4583 / 26,7499 |
@@ -177,6 +182,7 @@ Ohne Preis: Cerebras qwen-3.8-27b, Groq llama-Modelle (nur auf Anfrage), Silicon
 | OpenAI | gpt-6-luna | 0,0892 / 0,4458 |
 | OpenAI | gpt-6-sol | 1,7833 / 8,9166 |
 | OpenAI | gpt-6.1-sol | 1,7833 / 8,9166 |
+| OpenAI | gpt-6.1-terra | 0,8917 / 4,4583 |
 | OpenAI | o1 | 13,3749 / 53,4998 |
 | OpenAI | o1-pro | 133,7494 / 534,9978 |
 | OpenAI | o3 | 1,7833 / 7,1333 |
@@ -204,7 +210,6 @@ Ohne Preis: Cerebras qwen-3.8-27b, Groq llama-Modelle (nur auf Anfrage), Silicon
 | OVHcloud | gpt-oss-20b | 0,04 / 0,15 |
 | OVHcloud | meta-llama-3_3-70b-instruct | 0,67 / 0,67 |
 | OVHcloud | mistral-nemo-instruct-2407 | 0,13 / 0,13 |
-| OVHcloud | mistral-small-3.2-24b-instruct-2506 | 0,09 / 0,28 |
 | OVHcloud | qwen2.5-vl-72b-instruct | 0,91 / 0,91 |
 | OVHcloud | qwen3.5-397b-a17b | 0,60 / 3,60 |
 | OVHcloud | qwen3.5-9b | 0,10 / 0,15 |

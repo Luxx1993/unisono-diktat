@@ -300,8 +300,9 @@ private class OpenAiRealtimeSession(
 }
 
 /**
- * Soniox streaming transcription over `wss://stt-rt.soniox.com/transcribe-websocket`. The API key and
- * config go in the first JSON message (no auth header); 16 kHz mono PCM16 is streamed as raw binary
+ * Soniox streaming transcription over `wss://stt-rt.soniox.com/transcribe-websocket`. The API key goes
+ * in the `Authorization: Bearer` header of the handshake — a key inside the config message is deprecated
+ * and refused from 2027-01-15 — and the config is the first JSON message; 16 kHz mono PCM16 is streamed as raw binary
  * frames. Each `tokens[]` message carries `is_final` tokens (permanent) plus a replaceable tail; the full
  * text (permanent + tail) is emitted as the partial, and the permanent text as the final on flush. An
  * empty frame flushes; the server replies `finished:true` and closes.
@@ -331,7 +332,8 @@ private class SonioxRealtimeSession(
 
     fun connect() {
         val url = wsUrl?.takeIf { it.isNotBlank() } ?: URL
-        ws = client.newWebSocket(Request.Builder().url(url).build(), listener)
+        val request = Request.Builder().url(url).header("Authorization", "Bearer $apiKey").build()
+        ws = client.newWebSocket(request, listener)
     }
 
     private val listener = object : WebSocketListener() {
@@ -367,7 +369,6 @@ private class SonioxRealtimeSession(
     }
 
     private fun config(): String = buildJsonObject {
-        put("api_key", apiKey)
         put("model", model)
         put("audio_format", "pcm_s16le")
         put("sample_rate", 16_000)
@@ -1476,3 +1477,11 @@ internal fun languageHintsOf(language: String?, expectedLanguages: List<String>)
     return (if (pinned != null) listOf(pinned) else expectedLanguages)
         .filter { it.isNotBlank() && it != "detect" }
 }
+
+/**
+ * Whether a multipart transcription goes to Mistral's own `audio/transcriptions`, which documents a
+ * narrower field set than OpenAI's (no `prompt`, no `response_format`, two-letter `language`). Judged
+ * by the host, so a Voxtral model reached through OpenRouter or a custom server keeps the OpenAI form.
+ */
+internal fun isMistralVoxtral(baseUrl: String, model: String): Boolean =
+    baseUrl.contains("api.mistral.ai", ignoreCase = true) && model.lowercase().startsWith("voxtral")
