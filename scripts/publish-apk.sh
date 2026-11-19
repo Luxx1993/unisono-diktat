@@ -9,7 +9,8 @@
 #
 # Die Debug-APK enthält native Bibliotheken für drei Prozessoren (rund 115 MB, über dem 100-MB-Limit von
 # GitHub). Für das Galaxy S24 reicht arm64: das Skript entfernt die anderen, richtet die Datei neu aus und
-# signiert sie wieder mit dem Debug-Schlüssel dieses Rechners (~/.android/debug.keystore, oder DEBUG_KEYSTORE).
+# signiert sie wieder mit dem Debug-Schlüssel (~/.android/debug.keystore, oder DEBUG_KEYSTORE). Normalerweise läuft
+# das im GitHub-Workflow .github/workflows/apk.yml, der den festen diktat-Schlüssel bereitstellt.
 #
 # Wichtig: Dieselbe Signatur wie bei der bisher veröffentlichten APK, sonst lässt sich die neue Version nicht
 # über die alte installieren. Das Skript vergleicht den Fingerabdruck mit der APK auf `apk` und bricht ab, wenn er
@@ -70,6 +71,10 @@ git fetch -q origin apk
 git worktree add -q --detach "$tmp" origin/apk
 
 old_key=$(fingerprint "$tmp/Dictate-Diktat-arm64.apk" || true)
+# Der bis November 2026 benutzte Schlüssel lag nur auf einem Rechner und ist verloren. Eine APK, die noch mit
+# ihm signiert ist, darf einmal durch eine mit dem neuen Schlüssel ersetzt werden (Neuinstallation nötig).
+lost_key=45e2792ddc9646037fb74aa01266686bef3f0e63c119f53ebedb32f64bd3e1dd
+[ "$old_key" = "$lost_key" ] && ALLOW_NEW_KEY=1
 if [ -n "$old_key" ] && [ "$old_key" != "$new_key" ] && [ "${ALLOW_NEW_KEY:-0}" != 1 ]; then
     echo "Abbruch: Der Schlüssel dieses Rechners ($new_key) ist nicht der der veröffentlichten APK ($old_key)." >&2
     echo "Mit der neuen Datei ließe sich die installierte App nicht aktualisieren. Den alten Schlüssel nach" >&2
