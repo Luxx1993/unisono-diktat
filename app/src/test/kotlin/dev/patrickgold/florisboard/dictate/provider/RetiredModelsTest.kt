@@ -55,6 +55,18 @@ class RetiredModelsTest {
     }
 
     @Test
+    fun `Universal-3_5 Pro moves to STT-3_7, in batch and live, and the Sync API keeps its model`() {
+        val sync = "universal-3-5-pro${ProviderRegistry.ASSEMBLYAI_SYNC_SUFFIX}"
+        val live = ProviderAccounts()
+            .put(ProviderAccount(providerId = "assemblyai", transcriptionModel = "universal-3-5-pro", realtimeModel = "universal-3-5-pro"))
+            .replaceRetiredModels().getOrEmpty("assemblyai")
+        assertEquals("assemblyai-stt-3-7", live.transcriptionModel)
+        assertEquals("assemblyai-stt-3-7-realtime", live.realtimeModel)
+        val keyring = ProviderAccounts().put(ProviderAccount(providerId = "assemblyai", transcriptionModel = sync))
+        assertSame(keyring, keyring.replaceRetiredModels())
+    }
+
+    @Test
     fun `the same model id at another provider is left alone`() {
         val keyring = ProviderAccounts().put(ProviderAccount(providerId = "openrouter", transcriptionModel = "voxtral-mini-latest"))
         assertSame(keyring, keyring.replaceRetiredModels())

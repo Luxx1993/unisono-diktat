@@ -178,7 +178,7 @@ object ProviderRegistry {
         defaultTranscriptionModel = "gpt-transcribe",
         // gpt-6-astra, the third of the current line, is left to the live catalog: at a hundred times
         // Luna's price it buys nothing a correction or a rephrasing needs.
-        curatedChatModels = listOf("gpt-6-luna", "gpt-6.1-terra", "gpt-6.1-sol"),
+        curatedChatModels = listOf("gpt-6-luna", "gpt-6.1-terra", "gpt-6.2-sol"),
         // whisper-1, gpt-4o-transcribe and gpt-4o-mini-transcribe leave the API on 2027-02-26 (announced
         // 2026-08-26). Until then they still come up in the live catalog for whoever wants them; they are
         // just no longer offered as a starting point.
@@ -358,7 +358,8 @@ object ProviderRegistry {
         // The whole 2.5 generation is retired; the live picker merges any newer ones on top.
         curatedChatModels = listOf(
             // gemini-3.1-flash-lite is deprecated (Google, 2026-11); 3.5-flash-lite is its successor.
-            "gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.5-flash-lite",
+            // gemini-4-hydrogen (2026-11-12) is the cheapest of the Gemini 4 line.
+            "gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-4-hydrogen",
         ),
         // The dedicated STT model first, then the multimodal chat models that double as transcription
         // models — they travel a different endpoint, so both belong here.
@@ -513,12 +514,12 @@ object ProviderRegistry {
         capabilities = STT_ONLY,
         transcriptionApi = TranscriptionApi.ELEVENLABS_MULTIPART,
         // /v1/models mixes TTS + STT models, so no clean STT filter — curated instead. scribe_v1 was
-        // retired on 2026-07-09, leaving scribe_v2.
+        // retired on 2026-07-09. Scribe v3 (2026-11) succeeds v2 at a lower price ($0.20/h); v2 stays served.
         supportsDynamicModels = false,
         // The keys page left settings for the developers section; the old path redirects (2026-09-21).
         apiKeyUrl = "https://elevenlabs.io/app/developers/api-keys",
-        defaultTranscriptionModel = "scribe_v2",
-        curatedTranscriptionModels = listOf("scribe_v2"),
+        defaultTranscriptionModel = "scribe_v3",
+        curatedTranscriptionModels = listOf("scribe_v3", "scribe_v2"),
         // Read 2026-09-04: aac, aiff, ogg, mpeg/mp3, opus, wav, webm, flac, mp4/m4a — the most generous
         // list of any provider here, and one of only two that name Opus explicitly.
         acceptedAudioContainers = setOf(
@@ -528,8 +529,9 @@ object ProviderRegistry {
         // Realtime (#128): Scribe v2 Realtime WebSocket (~150ms). Model id verified when the session is built.
         supportsRealtime = true,
         realtimeApi = RealtimeApi.ELEVENLABS,
-        defaultRealtimeModel = "scribe_v2_realtime",
-        curatedRealtimeModels = listOf("scribe_v2_realtime"),
+        // scribe_v3_live (2026-11) succeeds scribe_v2_realtime on the same socket, passed as `model_id`.
+        defaultRealtimeModel = "scribe_v3_live",
+        curatedRealtimeModels = listOf("scribe_v3_live", "scribe_v2_realtime"),
     )
 
     /**
@@ -575,13 +577,13 @@ object ProviderRegistry {
         // problem as Deepgram, so again their own words: AssemblyAI's support article on getting a key
         // names this URL (support.assemblyai.com, read 2026-09-21).
         apiKeyUrl = "https://www.assemblyai.com/dashboard/api-keys",
-        // universal-3-pro was switched off on 2026-09-02 (AssemblyAI changelog); 3.5 Pro replaces it.
-        defaultTranscriptionModel = "universal-3-5-pro",
+        // AssemblyAI-STT-3.7 (2026-11, $0.21/h) succeeds Universal-3.5 Pro, now deprecated (it will route to 3.7).
+        defaultTranscriptionModel = "assemblyai-stt-3-7",
         // `-sync` is not a model of AssemblyAI's but this app's name for the Sync API with that model: one request
         // instead of upload-create-poll, which is what a short dictation wants (see [ASSEMBLYAI_SYNC_SUFFIX]).
         // The two ways in share one account and one key, so they are one entry here.
         curatedTranscriptionModels = listOf(
-            "universal-3-5-pro", "universal-2", "universal-3-5-pro$ASSEMBLYAI_SYNC_SUFFIX",
+            "assemblyai-stt-3-7", "universal-2", "universal-3-5-pro$ASSEMBLYAI_SYNC_SUFFIX",
         ),
         // The EU region (Dublin) keeps audio and transcript in the EU. The Sync API sits on the same region
         // under `sync.` instead of `api.` (see [assemblySyncBaseUrl]), so one choice covers both.
@@ -594,10 +596,10 @@ object ProviderRegistry {
         // verified when the session is built (billed by connection-open duration).
         supportsRealtime = true,
         realtimeApi = RealtimeApi.ASSEMBLYAI,
-        defaultRealtimeModel = "universal-3-6-pro",
-        curatedRealtimeModels = listOf(
-            "universal-3-6-pro", "universal-3-5-pro", "universal-streaming-english", "universal-streaming-multilingual",
-        ),
+        // AssemblyAI-STT-3.7-Realtime (2026-11, $0.30/h) is the current streaming model; Universal-3.6 Pro is the
+        // previous generation, Universal-Streaming English/Multilingual are replaced by 3.7-Realtime.
+        defaultRealtimeModel = "assemblyai-stt-3-7-realtime",
+        curatedRealtimeModels = listOf("assemblyai-stt-3-7-realtime", "universal-3-6-pro"),
     )
 
     /**

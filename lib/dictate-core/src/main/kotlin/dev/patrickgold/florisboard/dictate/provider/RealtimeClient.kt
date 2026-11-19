@@ -438,8 +438,11 @@ private class AssemblyAiRealtimeSession(
     private companion object {
         const val URL = "wss://streaming.assemblyai.com/v3/ws?sample_rate=16000&encoding=pcm_s16le"
 
-        /** The `speech_model` values the streaming docs list (2026-10-19); anything else (an older stored id) is left to the default. */
-        val MODELS = setOf("universal-3-6-pro", "universal-3-5-pro", "universal-streaming-english", "universal-streaming-multilingual")
+        /** The `speech_model` values the streaming docs list (2026-11-19); anything else (an older stored id) is left to the default. */
+        val MODELS = setOf(
+            "assemblyai-stt-3-7-realtime", "assemblyai-stt-3-7-realtime-agent", "universal-3-6-pro",
+            "universal-3-5-pro", "universal-streaming-english", "universal-streaming-multilingual",
+        )
     }
 
     fun connect() {

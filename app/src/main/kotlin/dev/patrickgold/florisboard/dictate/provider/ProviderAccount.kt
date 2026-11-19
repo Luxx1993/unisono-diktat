@@ -300,6 +300,7 @@ data class ProviderAccounts(
         val updated = accounts.mapValues { (id, account) ->
             val renames = RETIRED_MODELS[id] ?: return@mapValues account
             fun swap(model: String): String {
+                renames[model]?.let { return it }
                 val base = model.removeSuffix(ProviderRegistry.ASSEMBLYAI_SYNC_SUFFIX)
                 val next = renames[base] ?: return model
                 return if (base != model) next + ProviderRegistry.ASSEMBLYAI_SYNC_SUFFIX else next
@@ -307,7 +308,10 @@ data class ProviderAccounts(
             val next = account.copy(
                 transcriptionModel = swap(account.transcriptionModel),
                 chatModel = swap(account.chatModel),
-                realtimeModel = swap(account.realtimeModel),
+                // A batch successor is no streaming model: AssemblyAI's live 3.7 has its own id.
+                realtimeModel = swap(account.realtimeModel).let {
+                    if (id == "assemblyai" && it == "assemblyai-stt-3-7") "assemblyai-stt-3-7-realtime" else it
+                },
             )
             if (next != account) changed = true
             next
@@ -354,8 +358,19 @@ const val LEGACY_ASSEMBLY_SYNC_ID = "assemblyai_sync"
  * moves a stored choice to. Source: each provider's deprecation page, read 2026-11-06.
  */
 internal val RETIRED_MODELS: Map<String, Map<String, String>> = mapOf(
-    // universal-3-pro answers no request since 2026-09-02.
-    "assemblyai" to mapOf("universal-3-pro" to "universal-3-5-pro"),
+    // universal-3-pro answers no request since 2026-09-02; Universal-3.5 Pro is deprecated (2026-11) for
+    // AssemblyAI-STT-3.7. The Sync API keeps its model (an exact entry wins over the suffix rule), and the
+    // replaced streaming models move to 3.7-Realtime.
+    "assemblyai" to mapOf(
+        "universal-3-pro" to "assemblyai-stt-3-7",
+        "universal-3-5-pro" to "assemblyai-stt-3-7",
+        "universal-3-pro${ProviderRegistry.ASSEMBLYAI_SYNC_SUFFIX}" to "universal-3-5-pro${ProviderRegistry.ASSEMBLYAI_SYNC_SUFFIX}",
+        "universal-3-5-pro${ProviderRegistry.ASSEMBLYAI_SYNC_SUFFIX}" to "universal-3-5-pro${ProviderRegistry.ASSEMBLYAI_SYNC_SUFFIX}",
+        "universal-streaming-english" to "assemblyai-stt-3-7-realtime",
+        "universal-streaming-multilingual" to "assemblyai-stt-3-7-realtime",
+    ),
+    // scribe_v1 is retired; v3 is the current model.
+    "elevenlabs" to mapOf("scribe_v1" to "scribe_v3"),
     // v5 is removed on 2026-12-15; v6 (2026-11-03) takes the same requests.
     "soniox" to mapOf("stt-async-v5" to "stt-async-v6", "stt-rt-v5" to "stt-rt-v6"),
     // Deprecated in favour of 3.5 Flash-Lite.
