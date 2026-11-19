@@ -31,6 +31,9 @@
   AssemblyAI, Soniox, OpenAI, Gemini, xAI oder einem Offline-Modell auf dem Gerät.
 - **Preise sichtbar**: Die Modellauswahl zeigt neben jedem Modell den Listenpreis in € pro Stunde Audio, auch bei den
   Echtzeit-Modellen ([`docs/PREISE.md`](docs/PREISE.md)).
+- **Notizen**: Im Menü des schwebenden Buttons (gedrückt halten) steht „Notiz diktieren“. Das Diktat wird als reiner Text
+  mit Datum und Uhrzeit im Ordner „Notizen“ gespeichert und zusätzlich in die Zwischenablage kopiert, ohne Audio und ohne
+  etwas ins Feld zu tippen. Einzeln oder alle löschen; wer will, schaltet „Jedes Diktat als Notiz“ ein.
 - **Verlauf und Statistik**: Letzte Diktate zum Kopieren, Wörter gesamt, diesen Monat, Tage in Folge.
 - **Offline-Erkennung** auf dem Gerät, ganz ohne Netz und Anbieter.
 - **Sichern und Wiederherstellen** aller Einstellungen, auf Wunsch mit API-Keys.
@@ -93,6 +96,12 @@ Was kosten 20, 50 oder 100 Stunden Transkription im Monat, wenn du direkt über 
 2. Beim ersten Mal erlaubt Android die Installation aus dieser Quelle (Einstellungen › „Diese Quelle zulassen“),
    danach „Installieren“. Eine ältere diktat-Version wird dabei aktualisiert, Einstellungen bleiben erhalten.
 3. App öffnen und weiter bei „Einrichten“.
+
+**Aktualisieren:** Einstellungen › „App aktualisieren“ (auch unter „Über“). Die App sucht beim Öffnen der Einstellungen
+nach einer neuen Version, lädt sie auf Antippen, prüft die Prüfsumme und installiert sie über die alte. Schlüssel,
+Statistiken, Verlauf, Notizen und Stile bleiben erhalten. Beim ersten Mal fragt Android einmal, ob diktat Apps
+installieren darf, und zeigt seinen Bestätigungsdialog; ab Android 12 laufen spätere Updates meist ohne Dialog.
+Die Play-Version hat diese Funktion nicht, sie wird über Google Play aktualisiert.
 
 Für Google Play gibt es eine eigene Signatur und ein App-Bundle (`scripts/build-play-bundle.sh`); die Schritte stehen in
 [`docs/play-store/ANLEITUNG.md`](docs/play-store/ANLEITUNG.md). Die Debug-APK und die Play-Version lassen sich nicht

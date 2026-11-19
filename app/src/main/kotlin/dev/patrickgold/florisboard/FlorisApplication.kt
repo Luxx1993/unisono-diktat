@@ -110,6 +110,9 @@ class FlorisApplication : Application() {
             DictateLegacyMigrator.migrateProviderKeyringIfNeeded()
             DictateLegacyMigrator.migrateTrustUserCertsToAccountsIfNeeded()
             DictateLegacyMigrator.mergeAssemblySyncIfNeeded()
+            DictateLegacyMigrator.replaceRetiredModelsIfNeeded()
+            // A downloaded update has been installed (or abandoned) by the time the app starts again.
+            dev.patrickgold.florisboard.app.update.AppUpdater.cleanUp(this@FlorisApplication)
             DictateLegacyMigrator.seedStylesIfNeeded(this@FlorisApplication)
             preferenceStoreLoaded.value = true
         }

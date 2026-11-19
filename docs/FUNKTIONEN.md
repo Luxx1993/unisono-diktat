@@ -46,6 +46,7 @@ sprechen → (Transkription durch Anbieter) → optional KI-Aufräumen / Stil �
 | **Schwebender Button („Wolke“)** | Bubble über anderen Apps (Bedienungshilfe-Dienst), schreibt in das fokussierte Feld. Luxx1993s Hauptweg neben SwiftKey. | `dictate/overlay/` | vorhanden |
 | **Spracheingabe-Methode** | Dictate als Spracheingabe-Methode, zusammen mit einer fremden Tastatur (SwiftKey) nutzbar. | `dictate/recognition/DictateVoiceInputMethodService.kt` | vorhanden |
 | **System-Erkennungsdienst** | Dictate als systemweiter Spracherkenner (Standard-Android-`RecognitionService`). Manche Tastaturen (z. B. Gboard) nutzen ihn nicht. | `dictate/recognition/DictateRecognitionService.kt`, `RecognitionActivity.kt` | vorhanden |
+| **Notizen** | Menü am schwebenden Button „Notiz diktieren“ (oder Schalter „Jedes Diktat als Notiz“): Text mit Datum und Uhrzeit in den Ordner „Notizen“ und in die Zwischenablage, ohne Audio, nichts ins Feld. Notizen einzeln oder alle löschen, kopieren, teilen. | `dictate/data/notes/`, `NoteSink.kt`, `DictateNotesScreen.kt` | vorhanden |
 | **Datei transkribieren** | Audiodatei wählen oder aus anderer App teilen, Ergebnis in eigener Ansicht. Auch im Menü des schwebenden Buttons. | `dictate/importer/`, `FileTranscriptionActivity.kt` | vorhanden |
 | ~~Volle Tastatur (IME)~~ | FlorisBoard-Tastatur mit Diktat-Leiste, Prompts, GIFs, Sticker, Scan, Übersetzung | – | **entfernt** (Abschnitt 13) |
 | ~~Wear OS~~ | Diktat von der Uhr | – | **entfernt** (Abschnitt 13) |
@@ -202,6 +203,12 @@ Updates des Originals lassen sich damit praktisch nicht mehr übernehmen (so gew
   keine Tastatur. Umbenennen wäre reine Kosmetik mit großem Umfang.
 - **Spalte `trigger` in der Prompt-Datenbank**: das Tipp-Kürzel ist weg, die Spalte bleibt, damit keine Datenbank-Migration nötig ist.
 - **Import aus der alten Dictate-App** (`DictateLegacyMigrator`): keine Tastatur, nur Übernahme alter Einstellungen.
+- **App aktualisieren** (`app/update/AppUpdater`, November 2026): nur in der Debug-APK von GitHub. Liest `version.json` auf dem
+  Zweig `apk` (schreibt `scripts/publish-apk.sh`), lädt die APK, prüft SHA-256 und installiert sie über `PackageInstaller`
+  über die laufende App; die Daten bleiben, weil Paket und Signatur gleich sind. Die Berechtigung
+  `REQUEST_INSTALL_PACKAGES` steht nur im Debug-Manifest, die Play-Version hat sie nicht. Die Versionsnummer der
+  Debug-Builds zählt dafür die Minuten seit 2024 bis zum Commit (vorher die Zahl der Commits, die in einem flachen
+  Klon zu klein war und Android ein Update als Rückstufung hätte ablehnen lassen).
 
 **Entschieden:** Langdiktat bleibt und ist am schwebenden Button angebunden (Abschnitt 5). Halten zum Aufnehmen bleibt und ist am schwebenden Button angebunden, wählbar unter Einstellungen ›
 Aufnahme (Antippen oder Gedrückt halten, Abschnitt 5).

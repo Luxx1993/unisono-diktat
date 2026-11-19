@@ -46,6 +46,19 @@
     <string name="about__data_attributions__title">Daten- und Modell-Lizenzen</string>
     <string name="about__data_attributions__summary">Lizenzen der lokalen Modelle, Wörterbücher und Sprachdaten</string>
     <string name="about__version__title" comment="Preference title">Version</string>
+    <string name="app_update__title">App aktualisieren</string>
+    <string name="app_update__idle">Version {version} · tippen, um nach einer neuen zu suchen</string>
+    <string name="app_update__checking">Suche nach einer neuen Version …</string>
+    <string name="app_update__up_to_date">Aktuell ({version})</string>
+    <string name="app_update__available">Neue Version {version} ({size}) · tippen zum Installieren</string>
+    <string name="app_update__downloading">Lade herunter … {percent} %</string>
+    <string name="app_update__needs_permission">diktat einmalig erlauben, Apps zu installieren, dann noch einmal tippen</string>
+    <string name="app_update__installing">Wird installiert … die App startet danach neu</string>
+    <string name="app_update__failed">Update fehlgeschlagen: {error} · tippen zum Wiederholen</string>
+    <string name="app_update__confirm_title">Update installieren?</string>
+    <string name="app_update__confirm_text">diktat {version} ({size}) wird über diese Version installiert. Deine Schlüssel, Statistiken, der Verlauf, Notizen und Stile bleiben erhalten. Die App schließt sich während des Updates kurz.</string>
+    <string name="app_update__confirm_ok">Installieren</string>
+    <string name="app_update__confirm_cancel">Nicht jetzt</string>
     <string name="about__version_copied__title" comment="Title of the toast for copying the version string">Version in die Zwischenablage kopiert</string>
     <string name="about__version_copied__error" comment="Title of the error toast for copying the version string">Etwas ist schief gelaufen: {error_message}</string>
     <string name="about__changelog__title" comment="Preference title">Änderungsprotokoll</string>
@@ -368,6 +381,19 @@
     <string name="dictate__model_picker_search">Modell-ID suchen oder eingeben</string>
     <string name="dictate__model_picker_loading">Modelle werden geladen…</string>
     <string name="dictate__model_picker_chat_price_hint" comment="Explains the price next to each text model">Preis: Eingabe / Ausgabe in € je 1 Mio. Token</string>
+    <string name="dictate__notes_title">Notizen</string>
+    <string name="dictate__notes_menu_dictate">Notiz diktieren</string>
+    <string name="dictate__notes_saved">Notiz gespeichert und kopiert</string>
+    <string name="dictate__notes_empty">Noch keine Notizen. Halte den schwebenden Button gedrückt, wähle „Notiz diktieren“ und sprich.</string>
+    <string name="dictate__notes_always_title">Jedes Diktat als Notiz</string>
+    <string name="dictate__notes_always_summary">Diktate am schwebenden Button werden als Notiz gespeichert und kopiert, nicht ins Feld getippt.</string>
+    <string name="dictate__notes_delete">Notiz löschen</string>
+    <string name="dictate__notes_delete_all">Alle Notizen löschen</string>
+    <string name="dictate__notes_delete_all_title">Alle Notizen löschen?</string>
+    <string name="dictate__notes_delete_all_message">Alle Notizen werden dauerhaft gelöscht. Bereits kopierte Texte bleiben in der Zwischenablage.</string>
+    <string name="dictate__notes_count">{count} Notizen</string>
+    <string name="dictate__notes_copy">Kopieren</string>
+    <string name="dictate__notes_copied">Kopiert</string>
     <string name="dictate__model_picker_count">{count} Modelle</string>
     <string name="dictate__model_picker_refresh">Aktualisieren</string>
     <string name="dictate__model_picker_use_custom">„{model}\" verwenden</string>

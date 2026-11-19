@@ -45,6 +45,8 @@ import dev.patrickgold.florisboard.app.main.UDivider
 import dev.patrickgold.florisboard.app.main.UNavRow
 import dev.patrickgold.florisboard.app.main.UnisonoPage
 import dev.patrickgold.florisboard.app.settings.search.settingsSearchAnchor
+import dev.patrickgold.florisboard.app.update.AppUpdateRow
+import dev.patrickgold.florisboard.app.update.AppUpdater
 import dev.patrickgold.florisboard.lib.util.launchUrl
 import org.florisboard.lib.android.stringRes
 import org.florisboard.lib.compose.stringRes
@@ -97,6 +99,10 @@ fun AboutScreen() = UnisonoPage(title = stringRes(R.string.about__title)) {
                 }
             },
         )
+        if (AppUpdater.isSupported) {
+            UDivider()
+            AppUpdateRow()
+        }
         UDivider()
         UNavRow(
             title = stringRes(R.string.about__changelog__title),

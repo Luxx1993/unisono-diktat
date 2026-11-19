@@ -37,10 +37,7 @@ Kernablauf: sprechen → KI räumt den Text auf → Text wird eingefügt. Luxx19
 ```
 APK unter `app/build/outputs/apk/debug/`. Debug-Builds sind mit einem Debug-Schlüssel signiert.
 
-**APK veröffentlichen:** `scripts/publish-apk.sh` baut, verkleinert auf arm64, signiert mit dem Debug-Schlüssel (`--dry-run` prüft nur) und legt die APK auf den Zweig `apk`. Der feste Link in der README
-(`…/raw/apk/Dictate-Diktat-arm64.apk`) zeigt dann auf die neue Version. Nach jeder abgeschlossenen Änderung, die Lukas
-auf dem S24 testen soll, ausführen und den Link nennen. Dieselbe Debug-Signatur wie bisher nutzen, sonst gibt es kein
-Update über die alte App.
+**APK veröffentlichen:** Der Workflow `.github/workflows/apk.yml` baut bei jedem Push auf `diktat-edition` oder `ccr-*` (außer reinen Doku-Änderungen) und legt die APK samt `version.json` auf den Zweig `apk` (auch von Hand startbar: Actions › APK › Run workflow). Der feste Link in der README (`…/raw/apk/Dictate-Diktat-arm64.apk`) und der Update-Button in der App zeigen dann auf die neue Version. Nach jeder abgeschlossenen Änderung, die Lukas auf dem S24 testen soll, pushen, den Lauf abwarten und den Link nennen. Signiert wird mit dem festen diktat-Schlüssel: verschlüsselt als `debug.keystore.enc` auf dem Zweig `signing`, Passwort nur im Secret `DIKTAT_SIGNING_PASSWORD`. Zweig und Secret nie löschen, sonst gibt es kein Update über die installierte App mehr (der erste Schlüssel ging im November 2026 mit einem Container verloren). `scripts/publish-apk.sh` ist das Skript, das der Workflow ausführt; lokal nur mit `--dry-run`.
 
 **Google Play:** Vorbereitet in `docs/play-store/` (Anleitung, Datenschutzerklärung, Store-Texte und Formular-Antworten). `scripts/make-upload-key.sh` legt den Upload-Schlüssel an, `scripts/build-play-bundle.sh` baut das signierte `.aab`. Die Debug-APK (Zweig `apk`) und die Play-Version haben verschiedene Signaturen und lassen sich nicht überinstallieren.
 

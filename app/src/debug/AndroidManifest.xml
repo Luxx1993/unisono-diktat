@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Only the debug build (the APK from GitHub) updates itself, see AppUpdater. The Play version has neither
+  the permission nor the receiver: Google Play updates it, and Play does not allow self-updates.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <application>
+        <receiver
+            android:name="dev.patrickgold.florisboard.app.update.AppUpdateReceiver"
+            android:exported="false" />
+    </application>
+</manifest>

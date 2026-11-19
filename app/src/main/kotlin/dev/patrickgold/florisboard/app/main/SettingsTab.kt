@@ -10,6 +10,8 @@
 
 package dev.patrickgold.florisboard.app.main
 
+import dev.patrickgold.florisboard.app.update.AppUpdateRow
+import dev.patrickgold.florisboard.app.update.AppUpdater
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
@@ -267,6 +269,12 @@ internal fun SettingsTab() {
         )
         UDivider()
         UNavRow(
+            title = stringRes(R.string.dictate__notes_title),
+            icon = UnisonoIcons.Note,
+            onClick = { navController.navigate(Routes.Settings.DictateNotes) },
+        )
+        UDivider()
+        UNavRow(
             title = stringRes(R.string.main__settings_history),
             icon = UnisonoIcons.Clock,
             onClick = { navController.navigate(Routes.Settings.DictateHistory) },
@@ -302,6 +310,10 @@ internal fun SettingsTab() {
             icon = UnisonoIcons.Archive,
             onClick = { showBackup = true },
         )
+        if (AppUpdater.isSupported) {
+            UDivider()
+            AppUpdateRow()
+        }
         UDivider()
         UNavRow(
             title = stringRes(R.string.about__title),
