@@ -182,18 +182,39 @@ class OpenAiCompatibleClient(
             ("does not support" in m && ("thinking" in m || "reasoning" in m))
     }
 
+    /** True where chat goes to AssemblyAI's LLM Gateway rather than to [ProviderConfig.baseUrl] itself. */
+    private val chatViaAssemblyGateway: Boolean
+        get() = config.transcriptionApi == TranscriptionApi.ASSEMBLYAI_ASYNC
+
+    /** Where `chat/completions` lives: the base URL, or for AssemblyAI the LLM Gateway of the same region. */
+    private val chatBaseUrl: String
+        get() = if (chatViaAssemblyGateway) {
+            ProviderRegistry.assemblyLlmGatewayBaseUrl(config.normalizedBaseUrl)
+        } else {
+            config.normalizedBaseUrl
+        }
+
+    /** Headers for a chat call: Bearer everywhere, AssemblyAI's raw key for its gateway, as its docs show. */
+    private fun chatHeaders(): Headers = if (chatViaAssemblyGateway) {
+        Headers.Builder().add("Authorization", config.apiKey).build()
+    } else {
+        authHeaders()
+    }
+
     private suspend fun completeOnce(request: ChatRequest): Completion {
         val dto = ChatCompletionRequestDto(
             model = request.model,
             messages = request.messages.map { MessageDto(it.role.wire, it.content) },
             temperature = request.temperature,
-            maxTokens = request.maxTokens,
+            // The gateway caps an answer at 1000 tokens unless told otherwise, which cuts off a long
+            // dictation mid-sentence; the other providers answer up to the model's own limit.
+            maxTokens = request.maxTokens ?: if (chatViaAssemblyGateway) ASSEMBLY_GATEWAY_MAX_TOKENS else null,
             reasoningEffort = request.reasoningEffort,
         )
         val payload = json.encodeToString(ChatCompletionRequestDto.serializer(), dto)
         val httpRequest = Request.Builder()
-            .url(config.normalizedBaseUrl + "chat/completions")
-            .headers(authHeaders())
+            .url(chatBaseUrl + "chat/completions")
+            .headers(chatHeaders())
             .post(payload.toRequestBody(JSON_MEDIA_TYPE))
             .build()
         val body = executeForBody(httpRequest)
@@ -2116,6 +2137,9 @@ class OpenAiCompatibleClient(
         /** Soniox / AssemblyAI async polling: interval between status checks and the overall budget. */
         private const val SONIOX_POLL_INTERVAL_MS = 1500L
         private const val SONIOX_POLL_TIMEOUT_MS = 300_000L
+
+        /** Answer budget for AssemblyAI's LLM Gateway, whose own default (1000 tokens) is too short. */
+        private const val ASSEMBLY_GATEWAY_MAX_TOKENS = 16_000
 
         /** The Gladia model that needs a pinned language (see [transcribeGladia]). */
         private const val GLADIA_SOLARIA_3 = "solaria-3"

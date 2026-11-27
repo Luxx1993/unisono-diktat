@@ -59,14 +59,14 @@ Die Einstellungsseite zeigt nur eingerichtete Anbieter, weitere hinter „Anbiet
 
 | Anbieter | Transkription | Aufräumen (Chat) | Echtzeit |
 |---|---|---|---|
-| ElevenLabs Scribe (Standard `scribe_v2`) | ja | – | ja |
-| Anthropic (Claude) (Standard im Code `claude-haiku-4-5-20251001`) | – | ja | – |
+| ElevenLabs Scribe (Standard `scribe_v3`) | ja | – | ja |
+| Anthropic (Claude) (Standard im Code `claude-haiku-5-5`) | – | ja | – |
 | OpenAI | ja | ja | ja |
 | Groq | ja | ja | – |
 | Google Gemini | ja | ja | ja |
 | Mistral AI (Voxtral) | ja | ja | ja |
 | Deepgram (Nova-3) | ja | – | ja |
-| AssemblyAI (Universal-3 Pro, asynchron) | ja | – | ja |
+| AssemblyAI (STT-3.7, asynchron; Aufräumen über das LLM Gateway, Standard `claude-haiku-5-5`) | ja | ja | ja |
 | AssemblyAI, Modell `universal-3-5-pro-sync` (eine Anfrage, 256 MB / 20 Min.) | ja | – | – |
 | Gladia (`solaria-1`, `solaria-3`; EU-West) | ja | – | ja |
 | Together AI (Spracherkennung `openai/whisper-large-v3`, `nvidia/parakeet-tdt-0.6b-v3`) | ja | ja | – |

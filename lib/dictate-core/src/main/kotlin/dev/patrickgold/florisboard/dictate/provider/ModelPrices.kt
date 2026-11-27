@@ -119,6 +119,11 @@ object ModelPrices {
         "anthropic|claude-sonnet-4-6" to c(2.675, 13.3749),
         "anthropic|claude-sonnet-5" to c(1.7833, 8.9166),
         "anthropic|claude-sonnet-5-5" to c(1.7833, 8.9166),
+        // AssemblyAI's LLM Gateway: the providers' list prices plus 10 % for staying in the US or EU region,
+        // which a request to its regional address does (assemblyai.com/pricing, read 2026-11-27).
+        "assemblyai|claude-haiku-5-5" to c(0.0981, 0.4904),
+        "assemblyai|claude-sonnet-5-5" to c(1.9616, 9.8083),
+        "assemblyai|gemini-3.5-flash-lite" to c(0.2942, 2.4521),
         "cerebras|gpt-oss-120b" to c(0.3121, 0.6687),
         "cerebras|qwen-3.8-27b" to c(0.8827, 1.3286),
         "deepinfra|anthropic/claude-haiku-4-5" to c(0.8917, 4.4583),
