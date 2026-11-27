@@ -25,9 +25,12 @@ class AssemblyLlmGatewayTest : FunSpec({
             "https://llm-gateway.eu.assemblyai.com/v1/"
     }
 
-    test("AssemblyAI offers rewording with Claude Haiku by default") {
-        ProviderRegistry.ASSEMBLYAI.capabilities.chat shouldBe true
-        ProviderRegistry.ASSEMBLYAI.defaultChatModel shouldBe "claude-haiku-5-5"
+    test("AssemblyAI rewords with Gemini 3.5 Flash-Lite at low effort, Claude Haiku as fallback") {
+        val preset = ProviderRegistry.ASSEMBLYAI
+        preset.capabilities.chat shouldBe true
+        preset.defaultChatModel shouldBe "gemini-3.5-flash-lite"
+        preset.reasoningEffortWhenOff("gemini-3.5-flash-lite") shouldBe "low"
+        preset.chatFallbackModel shouldBe "claude-haiku-5-5"
     }
 
     test("a chat call goes to v1/chat/completions with the raw key and a long answer budget") {
@@ -43,17 +46,36 @@ class AssemblyLlmGatewayTest : FunSpec({
                     baseUrl = server.url("/").toString(),
                     apiKey = "aai-key",
                     transcriptionApi = TranscriptionApi.ASSEMBLYAI_ASYNC,
+                    chatFallbackModel = "claude-haiku-5-5",
                 ),
             )
-            val result = client.complete(ChatRequest.ofUser("claude-haiku-5-5", "hallo äh welt"))
+            val result = client.complete(ChatRequest.ofUser("gemini-3.5-flash-lite", "hallo äh welt", reasoningEffort = "low"))
             val recorded = server.takeRequest()
 
             result.text shouldBe "Hallo Welt."
             recorded.path shouldBe "/v1/chat/completions"
             recorded.getHeader("Authorization") shouldBe "aai-key"
             val body = recorded.body.readUtf8()
-            body shouldContain "\"model\":\"claude-haiku-5-5\""
+            body shouldContain "\"model\":\"gemini-3.5-flash-lite\""
             body shouldContain "\"max_tokens\":16000"
+            body shouldContain "\"reasoning_effort\":\"low\""
+            body shouldContain "\"fallbacks\":[{\"model\":\"claude-haiku-5-5\"}]"
+        }
+    }
+
+    test("no fallback when the chosen model is the fallback itself") {
+        MockWebServer().use { server ->
+            server.enqueue(MockResponse().setResponseCode(200).setBody("""{"choices":[{"message":{"content":"ok"}}]}"""))
+            val client = OpenAiCompatibleClient(
+                ProviderConfig(
+                    baseUrl = server.url("/").toString(),
+                    apiKey = "aai-key",
+                    transcriptionApi = TranscriptionApi.ASSEMBLYAI_ASYNC,
+                    chatFallbackModel = "claude-haiku-5-5",
+                ),
+            )
+            client.complete(ChatRequest.ofUser("claude-haiku-5-5", "x"))
+            server.takeRequest().body.readUtf8().contains("fallbacks") shouldBe false
         }
     }
 })

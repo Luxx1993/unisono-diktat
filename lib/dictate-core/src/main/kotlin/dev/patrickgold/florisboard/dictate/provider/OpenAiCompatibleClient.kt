@@ -210,6 +210,10 @@ class OpenAiCompatibleClient(
             // dictation mid-sentence; the other providers answer up to the model's own limit.
             maxTokens = request.maxTokens ?: if (chatViaAssemblyGateway) ASSEMBLY_GATEWAY_MAX_TOKENS else null,
             reasoningEffort = request.reasoningEffort,
+            // The gateway retries on this model by itself when the chosen one fails; never the model onto itself.
+            fallbacks = config.chatFallbackModel
+                ?.takeIf { chatViaAssemblyGateway && it != request.model }
+                ?.let { listOf(FallbackDto(it)) },
         )
         val payload = json.encodeToString(ChatCompletionRequestDto.serializer(), dto)
         val httpRequest = Request.Builder()
@@ -1664,7 +1668,11 @@ class OpenAiCompatibleClient(
         @SerialName("max_tokens") val maxTokens: Int? = null,
         // Omitted when null (encodeDefaults = false), so non-reasoning models are unaffected (issue #141).
         @SerialName("reasoning_effort") val reasoningEffort: String? = null,
+        val fallbacks: List<FallbackDto>? = null,
     )
+
+    @Serializable
+    private data class FallbackDto(val model: String)
 
     @Serializable
     private data class MessageDto(val role: String, val content: String)
@@ -2287,6 +2295,7 @@ class OpenAiCompatibleClient(
                 useChatAudio = useChatAudio,
                 trustUserCerts = trustUserCerts,
                 curatedModels = (preset.curatedTranscriptionModels + preset.curatedChatModels).distinct(),
+                chatFallbackModel = preset.chatFallbackModel,
             )
         )
     }

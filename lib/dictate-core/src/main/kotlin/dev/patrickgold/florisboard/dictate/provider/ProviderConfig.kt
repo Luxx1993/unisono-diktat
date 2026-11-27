@@ -75,6 +75,8 @@ data class ProviderConfig(
      * request per provider, because a list compiled into the app can never fail (#384).
      */
     val curatedModels: List<String> = emptyList(),
+    /** See [ProviderPreset.chatFallbackModel]: sent as the gateway's fallback with every chat request. */
+    val chatFallbackModel: String? = null,
 ) {
     /** Base URL guaranteed to end with a single trailing slash. */
     val normalizedBaseUrl: String

@@ -72,6 +72,11 @@ data class ProviderPreset(
      * picked runs at whatever their setting says.
      */
     val defaultChatReasoningEffort: String? = null,
+    /**
+     * A model the provider itself retries a failed chat request on, sent with every request (AssemblyAI's
+     * LLM Gateway `fallbacks`). Null for providers without server-side fallbacks.
+     */
+    val chatFallbackModel: String? = null,
     val defaultTranscriptionModel: String? = null,
     val extraHeaders: Map<String, String> = emptyMap(),
     val isCustom: Boolean = false,
@@ -584,8 +589,13 @@ object ProviderRegistry {
         defaultTranscriptionModel = "assemblyai-stt-3-7",
         // LLM Gateway model ids (assemblyai.com/docs/llm-gateway/available-models, read 2026-11-27). Claude and
         // most Gemini models also run in the EU region; OpenAI's only in the US, so none is offered here.
-        defaultChatModel = "claude-haiku-5-5",
-        curatedChatModels = listOf("claude-haiku-5-5", "claude-sonnet-5-5", "gemini-3.5-flash-lite"),
+        // Default chosen with AssemblyAI's model guide for short dictation clean-up, weighted towards speed
+        // (assemblyai.com/docs/llm-gateway/choose-a-model): Gemini 3.5 Flash-Lite at reasoning effort low,
+        // with Claude Haiku 5.5 as the gateway's fallback when it fails.
+        defaultChatModel = "gemini-3.5-flash-lite",
+        defaultChatReasoningEffort = "low",
+        chatFallbackModel = "claude-haiku-5-5",
+        curatedChatModels = listOf("gemini-3.5-flash-lite", "claude-haiku-5-5", "claude-sonnet-5-5"),
         // `-sync` is not a model of AssemblyAI's but this app's name for the Sync API with that model: one request
         // instead of upload-create-poll, which is what a short dictation wants (see [ASSEMBLYAI_SYNC_SUFFIX]).
         // The two ways in share one account and one key, so they are one entry here.
