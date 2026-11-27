@@ -72,6 +72,11 @@ data class ProviderPreset(
      * picked runs at whatever their setting says.
      */
     val defaultChatReasoningEffort: String? = null,
+    /**
+     * A model the provider itself retries a failed chat request on, sent with every request (AssemblyAI's
+     * LLM Gateway `fallbacks`). Null for providers without server-side fallbacks.
+     */
+    val chatFallbackModel: String? = null,
     val defaultTranscriptionModel: String? = null,
     val extraHeaders: Map<String, String> = emptyMap(),
     val isCustom: Boolean = false,
@@ -563,14 +568,17 @@ object ProviderRegistry {
     )
 
     /**
-     * AssemblyAI (issue #143): transcription-only, async upload/create/poll flow with a raw `authorization`
-     * header (see [TranscriptionApi.ASSEMBLYAI_ASYNC]).
+     * AssemblyAI (issue #143): async upload/create/poll flow with a raw `authorization` header (see
+     * [TranscriptionApi.ASSEMBLYAI_ASYNC]). Since November 2026 also rewording, through AssemblyAI's LLM Gateway:
+     * an OpenAI-compatible `chat/completions` on its own host (see [assemblyLlmGatewayBaseUrl]) that takes the
+     * same key and bills Claude, Gemini and others at the providers' list prices (Claude via AWS Bedrock;
+     * +10 % when kept in the US or EU region). One key and one balance for transcription and cleanup.
      */
     val ASSEMBLYAI = ProviderPreset(
         id = "assemblyai",
         displayName = "AssemblyAI",
         baseUrl = "https://api.assemblyai.com/",
-        capabilities = STT_ONLY,
+        capabilities = CHAT_AND_STT,
         transcriptionApi = TranscriptionApi.ASSEMBLYAI_ASYNC,
         supportsDynamicModels = false,
         // `/app/api-keys` was the old dashboard and now lands on a bare login. Same 200-for-anything
@@ -579,6 +587,15 @@ object ProviderRegistry {
         apiKeyUrl = "https://www.assemblyai.com/dashboard/api-keys",
         // AssemblyAI-STT-3.7 (2026-11, $0.21/h) succeeds Universal-3.5 Pro, now deprecated (it will route to 3.7).
         defaultTranscriptionModel = "assemblyai-stt-3-7",
+        // LLM Gateway model ids (assemblyai.com/docs/llm-gateway/available-models, read 2026-11-27). Claude and
+        // most Gemini models also run in the EU region; OpenAI's only in the US, so none is offered here.
+        // Default chosen with AssemblyAI's model guide for short dictation clean-up, weighted towards speed
+        // (assemblyai.com/docs/llm-gateway/choose-a-model): Gemini 3.5 Flash-Lite at reasoning effort low,
+        // with Claude Haiku 5.5 as the gateway's fallback when it fails.
+        defaultChatModel = "gemini-3.5-flash-lite",
+        defaultChatReasoningEffort = "low",
+        chatFallbackModel = "claude-haiku-5-5",
+        curatedChatModels = listOf("gemini-3.5-flash-lite", "claude-haiku-5-5", "claude-sonnet-5-5"),
         // `-sync` is not a model of AssemblyAI's but this app's name for the Sync API with that model: one request
         // instead of upload-create-poll, which is what a short dictation wants (see [ASSEMBLYAI_SYNC_SUFFIX]).
         // The two ways in share one account and one key, so they are one entry here.
@@ -993,6 +1010,15 @@ object ProviderRegistry {
 
     /** The Sync API's address for an AssemblyAI base URL: the same region, `sync.` in place of `api.`. */
     fun assemblySyncBaseUrl(baseUrl: String): String = baseUrl.replace("://api.", "://sync.")
+
+    /**
+     * The LLM Gateway's address for an AssemblyAI base URL: the same region, `llm-gateway.` in place of `api.`,
+     * under `v1/` (`https://llm-gateway.assemblyai.com/v1/`, `https://llm-gateway.eu.assemblyai.com/v1/`).
+     */
+    fun assemblyLlmGatewayBaseUrl(baseUrl: String): String {
+        val host = (if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/").replace("://api.", "://llm-gateway.")
+        return if (host.endsWith("/v1/")) host else host + "v1/"
+    }
 
     /** All built-in presets in display order. The custom option is added by the UI on top of these. */
     val presets: List<ProviderPreset> = listOf(

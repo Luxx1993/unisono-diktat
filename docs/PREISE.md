@@ -6,6 +6,8 @@ Quelle: die Preisseiten der Anbieter, abgerufen am 21.10.2026, aktualisiert am 1
 
 **Stand 19.11.2026:** neu sind AssemblyAI-STT-3.7 (Datei) und 3.7-Realtime (Universal-3.5 Pro ist abgekündigt, Universal-Streaming ersetzt), ElevenLabs Scribe v3 und v3 Live (Scribe v2 ist günstiger geworden), xAI Grok STT 2.0 (OpenRouter), OpenAI GPT-6.2, Google Gemini 4 Carbon, Neon und Hydrogen sowie Claude Fable 5.2. Deepgram hat für Echtzeit wieder Aktionspreise (ohne Enddatum). Gemini 4 Argon und Carbon kosten ab 01.12.2026 das Doppelte; Gemini 2.5 Pro und Flash sind abgekündigt.
 
+**Seit 27.11.2026:** AssemblyAI kann auch aufräumen, über sein LLM Gateway mit demselben Key. Die Preise sind die Listenpreise der Modellanbieter plus 10 % Regionaufschlag (Anfragen an die Adresse der USA oder der EU bleiben in dieser Region).
+
 ## Datei
 
 | Anbieter | Modell | €/h |
@@ -106,6 +108,9 @@ Ohne Preis: Groq llama-Modelle (nur auf Anfrage), SiliconFlow (die Preisseite ne
 | Anthropic | claude-sonnet-4-6 | 2,675 / 13,3749 |
 | Anthropic | claude-sonnet-5 | 1,7833 / 8,9166 |
 | Anthropic | claude-sonnet-5-5 | 1,7833 / 8,9166 |
+| AssemblyAI (LLM Gateway) | claude-haiku-5-5 | 0,0981 / 0,4904 |
+| AssemblyAI (LLM Gateway) | claude-sonnet-5-5 | 1,9616 / 9,8083 |
+| AssemblyAI (LLM Gateway) | gemini-3.5-flash-lite | 0,2942 / 2,4521 |
 | Cerebras | gpt-oss-120b | 0,3121 / 0,6687 |
 | Cerebras | qwen-3.8-27b | 0,8827 / 1,3286 |
 | DeepInfra | anthropic/claude-haiku-4-5 | 0,8917 / 4,4583 |
